@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 permissions:
@@ -12,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: false
 
 jobs:
@@ -20,30 +21,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. 拉取 Hexo 主项目，同时拉取主题 submodule
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
+      # 2. Node 环境
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
-          cache: npm
+          node-version: 22
 
-      - name: Install dependencies
-        run: npm install
+      # 3. 安装 Hexo 主项目依赖
+      # 现在先用 npm install，不要求 package-lock.json
+      - name: Install Hexo dependencies
+        run: npm install --no-audit --no-fund
 
+      # 4. 安装主题依赖，例如 sass
+      - name: Install theme dependencies
+        working-directory: themes/wulitou-resume
+        run: npm install --no-audit --no-fund
+
+      # 5. 如果主题 package.json 里有 build，就自动执行
+      # 没有 build 脚本也不会报错
+      - name: Build theme
+        working-directory: themes/wulitou-resume
+        run: npm run build --if-present
+
+      # 6. 构建 Hexo
       - name: Build Hexo
         run: |
           npx hexo clean
           npx hexo generate
 
+      # 7. 配置 GitHub Pages
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
+      # 8. 上传 Hexo 生成的 public 目录
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
@@ -58,4 +76,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
