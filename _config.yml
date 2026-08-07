@@ -12,8 +12,8 @@
 
 # ── 站点信息 ──────────────────────────────────────────────────────
 language: zh-CN
-url: https://yigeFYW.github.io
-root: /
+url: https://yigefyw.github.io/resume-blog
+root: /resume-blog/
 permalink: posts/:title/
 
 # ── 主题 ──────────────────────────────────────────────────────────
