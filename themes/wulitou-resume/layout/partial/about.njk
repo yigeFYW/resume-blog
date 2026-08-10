@@ -1,0 +1,34 @@
+{% set resume = wulitou_resume() %}
+{% if resume.about.paragraphs.length %}
+<section class="wr-section" id="about" aria-labelledby="wr-about-title">
+  <div class="wr-card wr-card--flush wr-about">
+    {% if theme.theme_options.decorations !== false %}
+    <img class="wr-deco wr-deco--heart" src="{{ wulitou_asset('heart.png') }}" alt="" aria-hidden="true" width="56" height="50" loading="lazy" decoding="async">
+    {% endif %}
+
+    <div class="wr-section__head">
+      <h2 class="wr-section__title" id="wr-about-title">
+        <span class="wr-section__badge">{% set iconName = 'user' %}{% include 'partial/icons.njk' %}</span>
+        <span class="wr-section__label wr-section__label--wavy">{{ resume.about.title }}</span>
+      </h2>
+    </div>
+
+    <div class="wr-about__body">
+      {% for paragraph in resume.about.paragraphs %}
+      <p class="wr-about__text">{{ paragraph }}</p>
+      {% endfor %}
+    </div>
+
+    {% if theme.theme_options.decorations !== false %}
+    <div class="wr-about__mascot" aria-hidden="true">
+      {% if resume.about.bubbleLines.length %}
+      <p class="wr-about__bubble">
+        {% for line in resume.about.bubbleLines %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}
+      </p>
+      {% endif %}
+      <img class="wr-about__folder" src="{{ wulitou_asset('folder-mascot.png') }}" alt="" width="132" height="173" loading="lazy" decoding="async">
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

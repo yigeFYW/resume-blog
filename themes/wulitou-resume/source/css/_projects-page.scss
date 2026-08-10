@@ -1,0 +1,228 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Standalone project list page. Rows, not the home page's 3-up grid: the whole
+// point of "更多项目" is scanning many projects top-to-bottom.
+.wr-projects-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  @include desktop-up {
+    gap: var(--space-5);
+  }
+}
+
+// Yellow pill so the escape hatch reads as the sidebar's sibling, not another
+// project action.
+.wr-back--home {
+  background: var(--color-yellow);
+  border-color: var(--color-yellow-deep);
+
+  @include hover-capable {
+    &:hover {
+      background: var(--color-yellow-soft);
+    }
+  }
+}
+
+.wr-back--home .wr-back__icon {
+  color: var(--color-text);
+}
+
+.wr-plist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.wr-plist__item {
+  min-width: 0;
+}
+
+// Mobile: cover beside the title, tags and actions stacked underneath.
+// Tablet: wider cover spanning all three text rows.
+// Desktop: cover | text | actions, actions pulled to the right edge.
+.wr-prow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-areas:
+    'cover head'
+    'tags tags'
+    'actions actions';
+  gap: var(--space-3);
+  padding: var(--space-3);
+  overflow: hidden;
+  @include tile;
+  border-radius: var(--radius-lg);
+  transition: transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+
+  @include tablet-up {
+    grid-template-columns: 200px minmax(0, 1fr);
+    grid-template-areas:
+      'cover head'
+      'cover tags'
+      'cover actions';
+    align-content: start;
+    gap: var(--space-3) var(--space-5);
+    padding: var(--space-4);
+  }
+
+  // Only once there is room for a readable text column does the action stack
+  // move to its own right-hand column. The extra right padding is the gutter
+  // the row's decoration lives in, so it never lands on a button.
+  @include wide-up {
+    grid-template-columns: 210px minmax(0, 1fr) minmax(0, auto);
+    grid-template-areas:
+      'cover head actions'
+      'cover tags actions';
+    align-items: center;
+    padding-right: var(--space-8);
+  }
+
+  @include hover-capable {
+    &:hover {
+      transform: translateY(-3px);
+      border-color: var(--color-yellow-deep);
+      box-shadow: var(--shadow-card-hover);
+    }
+  }
+}
+
+.wr-prow__cover {
+  grid-area: cover;
+  align-self: start;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-surface-cream);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.wr-prow__head {
+  grid-area: head;
+  min-width: 0;
+}
+
+.wr-prow__name {
+  font-size: 16px;
+  @include wrap-anywhere;
+
+  @include tablet-up {
+    font-size: 19px;
+  }
+
+  // The title is a primary action, so it needs a real tap target without
+  // adding visible space around the heading.
+  a {
+    display: inline-block;
+    padding: 12px 0;
+    margin: -12px 0;
+
+    @include hover-capable {
+      &:hover {
+        color: var(--color-blue);
+      }
+    }
+  }
+}
+
+.wr-prow__desc {
+  margin-top: var(--space-2);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+
+  @include tablet-up {
+    font-size: 14px;
+  }
+}
+
+.wr-prow__tags {
+  grid-area: tags;
+  margin-top: 0;
+  align-self: start;
+}
+
+.wr-prow__actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-self: start;
+
+  @include wide-up {
+    justify-content: flex-end;
+    align-self: center;
+  }
+}
+
+.wr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--tap-target);
+  padding: 0 var(--space-4);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+  transition: background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  @include hover-capable {
+    &:hover {
+      background: var(--color-yellow-soft);
+      border-color: var(--color-yellow-deep);
+    }
+  }
+}
+
+.wr-btn--accent {
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+
+  @include hover-capable {
+    &:hover {
+      background: rgba(255, 107, 53, 0.09);
+      border-color: var(--color-orange);
+    }
+  }
+}
+
+.wr-prow__deco {
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 26px;
+  height: auto;
+  opacity: 0.85;
+}
+
+// The row is a grid, so the decoration would otherwise be squeezed into a cell.
+.wr-prow > *:not(.wr-deco) {
+  position: relative;
+  z-index: 1;
+}
+
+@include mobile-only {
+  .wr-prow__deco {
+    display: none;
+  }
+}

@@ -1,0 +1,257 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Skills: 2 cols mobile, 3 tablet, 5 desktop (DESIGN.md §8).
+.wr-skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+
+  @include tablet-up {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include wide-up {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.wr-skill {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  @include tile;
+  border-radius: var(--radius-md);
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+
+  // Radial glow overlay — anchored top-right, expands on hover.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 216, 92, 0.38) 0%,
+      rgba(255, 170, 80, 0.16) 30%,
+      transparent 60%
+    );
+    opacity: 0;
+    transform: scale(0.3);
+    transform-origin: 80% 20%;
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Keep all content above the glow layer.
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  // At five columns each cell is ~108px, so the icon, gap and padding all
+  // tighten to keep names like "TypeScript" on a single line.
+  @include wide-up {
+    padding: 10px;
+  }
+}
+
+// Hover: lift card + sweep glow from top-right toward bottom-left.
+@include hover-capable {
+  @include motion-ok {
+    .wr-skill:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 200, 100, 0.28);
+      box-shadow: var(--shadow-card-hover);
+
+      &::before {
+        opacity: 1;
+        transform: scale(2);
+      }
+    }
+  }
+}
+
+.wr-skill__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+
+  @include wide-up {
+    gap: 5px;
+  }
+}
+
+.wr-skill__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @include wide-up {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.wr-skill__name {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+  @include wrap-soft;
+
+  @include wide-up {
+    font-size: 12px;
+    letter-spacing: -0.01em;
+  }
+}
+
+.wr-skill__meter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wr-skill__track {
+  flex: 1 1 auto;
+  height: 6px;
+  min-width: 0;
+  background: var(--color-track);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.wr-skill__fill {
+  display: block;
+  height: 100%;
+  width: var(--wr-skill-level, 0%);
+  background: linear-gradient(90deg, var(--color-green), #35a06f);
+  border-radius: var(--radius-pill);
+}
+
+// Percentage text so the value never depends on colour alone.
+.wr-skill__value {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+
+// Reveal animation: JS adds .is-ready, then .is-visible when in viewport.
+// Without JS the bars simply render at their final width.
+@include motion-ok {
+  .wr-skills.is-ready .wr-skill__fill {
+    width: 0;
+    transition: width var(--duration-slow) var(--ease-out);
+  }
+
+  .wr-skills.is-ready.is-visible .wr-skill__fill {
+    width: var(--wr-skill-level, 0%);
+  }
+}
+
+// About
+.wr-about {
+  display: flex;
+  flex-direction: column;
+}
+
+.wr-about__body {
+  min-width: 0;
+}
+
+.wr-about__text {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--color-text-secondary);
+
+  & + & {
+    margin-top: var(--space-3);
+  }
+}
+
+.wr-deco--heart {
+  top: 10px;
+  right: 14px;
+  width: 40px;
+  height: auto;
+
+  @include desktop-up {
+    width: 48px;
+  }
+}
+
+// Folder mascot + bubble sit in normal flow (margin-top:auto) so they can never
+// overlap the paragraphs above, at any width.
+.wr-about__mascot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: auto;
+  // Keeps the mascot clear of the card's overflow:hidden right edge.
+  padding: var(--space-4) var(--space-1) 0 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wr-about__bubble {
+  position: relative;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 2px solid var(--color-text);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+  white-space: nowrap;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    bottom: 12px;
+    width: 10px;
+    height: 10px;
+    background: var(--color-surface);
+    border-top: 2px solid var(--color-text);
+    border-right: 2px solid var(--color-text);
+    transform: rotate(34deg);
+  }
+}
+
+.wr-about__folder {
+  width: 84px;
+  height: auto;
+  flex: 0 0 auto;
+
+  @include desktop-up {
+    width: 96px;
+  }
+}
+
+// Narrow cards cannot fit bubble + folder side by side.
+@media (max-width: 420px) {
+  .wr-about__bubble {
+    display: none;
+  }
+}

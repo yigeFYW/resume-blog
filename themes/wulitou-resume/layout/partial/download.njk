@@ -1,0 +1,16 @@
+{% set resume = wulitou_resume() %}
+{% if resume.resumeFile %}
+{#
+  Download action, not a nav item, so it sits below the nav behind its own
+  dashed divider. `download` is same-origin only; a remote PDF opens in a new
+  tab instead, which is what the browser would do anyway.
+#}
+<a class="wr-download{{ ' wr-download--drawer' if variant == 'drawer' }}"
+   href="{{ wulitou_url(resume.resumeFile.url) }}"
+   {% if resume.resumeFile.external %}target="_blank" rel="noopener noreferrer"{% else %}download{{ '="' + resume.resumeFile.filename + '"' if resume.resumeFile.filename }}{% endif %}
+   {% if variant == 'drawer' %}data-wr-drawer-dismiss{% endif %}>
+  <span class="wr-download__icon" aria-hidden="true">{% set iconName = 'download' %}{% include 'partial/icons.njk' %}</span>
+  <span class="wr-download__label">{{ resume.resumeFile.label }}</span>
+  {% if resume.resumeFile.external %}<span class="wr-visually-hidden">（新窗口打开）</span>{% endif %}
+</a>
+{% endif %}

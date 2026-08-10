@@ -1,0 +1,62 @@
+{% set resume = wulitou_resume() %}
+<div class="wr-drawer-overlay" data-wr-drawer-overlay hidden></div>
+
+<div class="wr-drawer"
+     id="wr-drawer"
+     data-wr-drawer
+     role="dialog"
+     aria-modal="true"
+     aria-label="导航菜单"
+     hidden>
+  <div class="wr-drawer__head">
+    <div class="wr-drawer__profile">
+      {% if resume.avatar %}
+      <img class="wr-drawer__avatar"
+           src="{{ wulitou_url(resume.avatar) }}"
+           alt=""
+           aria-hidden="true"
+           width="48" height="48"
+           loading="lazy" decoding="async">
+      {% endif %}
+      <span class="wr-drawer__meta">
+        {% if resume.name %}<strong>{{ resume.name }}</strong>{% endif %}
+        {% if resume.title %}<span>{{ resume.title }}</span>{% endif %}
+      </span>
+    </div>
+
+    <button class="wr-drawer__close" type="button" data-wr-drawer-close>
+      <span aria-hidden="true">{% set iconName = 'close' %}{% include 'partial/icons.njk' %}</span>
+      <span class="wr-visually-hidden">关闭导航菜单</span>
+    </button>
+  </div>
+
+  {% if resume.nav.length %}
+  {% set isDetail = wulitou_is_subpage(page) %}
+  {% set pinnedAnchor = resume.options.project_nav_anchor if isDetail else '' %}
+  <nav class="wr-drawer__nav" aria-label="页面导航">
+    <ul>
+      {% for item in resume.nav %}
+      {% set isPinned = isDetail and item.anchor == pinnedAnchor %}
+      <li>
+        <a class="wr-drawer__link{{ ' is-active' if isPinned }}"
+           href="{{ wulitou_nav_href(item.anchor, isDetail) }}"
+           {% if isPinned %}aria-current="page"{% endif %}
+           {% if not isDetail %}data-wr-nav-link="{{ item.anchor }}"{% endif %}
+           data-wr-drawer-dismiss>
+          {% if theme.theme_options.nav_icons !== false and item.icon %}
+          <span class="wr-drawer__icon" aria-hidden="true">{% set iconName = item.icon %}{% include 'partial/icons.njk' %}</span>
+          {% endif %}
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  {% set variant = 'drawer' %}{% include 'partial/download.njk' %}
+
+  {% if theme.theme_options.decorations !== false %}
+  <img class="wr-drawer__deco" src="{{ wulitou_asset('coffee-cup.png') }}" alt="" aria-hidden="true" width="96" height="70" loading="lazy" decoding="async">
+  {% endif %}
+</div>

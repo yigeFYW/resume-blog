@@ -1,0 +1,34 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// ── Live2D 看板娘容器适配 ──────────────────────────────────
+// L2Dwidget 在 JS 中创建 .live2d-widget-container（position: fixed），
+// 内部 canvas 宽高由 display.width / display.height 控制。
+// 桌面端保持原始尺寸；手机端缩到 1/3 并完全贴左下角。
+
+// 桌面端：容器本身透明，不影响页面交互。
+.live2d-widget-container {
+  // 确保不影响布局——容器始终 fixed，但显式声明以防 JS 变更。
+  z-index: 99999 !important;
+}
+
+// ── 手机端：1/3 缩放，完全靠左下角 ──────────────────────────
+// 用 CSS transform 缩放整个容器（canvas + 模型一起缩），
+// transform-origin: bottom left 保证缩放后仍贴在左下角。
+@media (max-width: $bp-desktop) {
+  .live2d-widget-container {
+    transform: scale(0.33);
+    transform-origin: bottom left;
+
+    // 缩放后容器视觉尺寸变小，但 fixed 定位 + origin 保持左下角不动。
+    // vOffset 已在 JS 配置中设为 -20px，缩放后约为 -7px，自然贴合。
+  }
+}
+
+// 极窄屏（≤425px）：进一步收紧，确保不遮挡内容。
+@media (max-width: 425px) {
+  .live2d-widget-container {
+    transform: scale(0.28);
+    transform-origin: bottom left;
+  }
+}

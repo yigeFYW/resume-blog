@@ -1,0 +1,78 @@
+# ── 示例简历数据 ──────────────────────────────────────────────────────────────
+# 这是 _example/ 下的精简示例，使用主题内置的默认图片，无需额外素材即可预览。
+# 完整字段说明见 source/_data/resume.example.yml
+
+name: 张三
+avatar: /images/avatar/avatar.png       # 主题内置默认头像
+title: 全栈工程师
+slogan: 用代码创造有趣的东西
+
+hero:
+  prefix: 你好，我是
+  highlight: 张三
+  suffix: '，'
+  description: 一个热爱前端与全栈开发的工程师，喜欢把复杂需求变成好看又好用的产品。
+  highlight_word: 好看又好用
+  image: /images/hero.png                # 主题内置默认插画
+  image_alt: 正在敲代码的程序员卡通形象
+  bubble: 代码是画笔，产品是画布！
+
+contact:
+  phone:
+    value: 138-0000-0000
+  email:
+    value: zhangsan@example.com
+  wechat:
+    value: zhangsan_dev
+    # qr: /images/wechat-qr.png          # 填了则点击弹出二维码灯箱
+  github:
+    value: https://github.com/zhangsan
+    label: github.com/zhangsan
+
+about:
+  title: 个人简介
+  content: |
+    热爱前端与全栈开发，擅长 Vue 生态和 Node.js 后端。
+    相信好产品既要能跑起来，也要让人第一眼就想用下去。
+  bubble: |
+    想法很多，
+    正在实现中……
+
+skills_note: 技能满格，快乐加倍！
+
+skills:
+  - { name: 'Vue 3', level: 90, icon: vue }
+  - { name: 'TypeScript', level: 85, icon: typescript }
+  - { name: 'Node.js', level: 85, icon: nodejs }
+  - { name: 'MySQL', level: 80, icon: mysql }
+  - { name: 'Docker', level: 75, icon: docker }
+  - { name: 'UI 设计', level: 70, icon: design }
+
+experience:
+  - company: 某科技公司
+    position: 全栈工程师
+    start: '2023'
+    end: 至今
+    description: 负责 SaaS 平台设计与开发，涵盖 H5、API 和内容系统。
+    tags: ['Vue 3', 'NestJS', 'MySQL']
+  - company: 某创业团队
+    position: 前端工程师
+    start: '2021'
+    end: '2023'
+    description:
+      - 负责后台管理系统与可视化页面。
+      - 推动构建流程优化，构建耗时下降约 40%。
+
+projects:
+  more_label: 更多项目
+  more_link: ''
+  items:
+    - name: 示例项目
+      description: 一个展示项目卡片结构的示例。
+      tags: ['Vue 3', 'NestJS']
+      demo: https://example.com
+      github: https://github.com/zhangsan/example
+
+footer:
+  copyright: '@'
+  icp: ''                                 # 如「宁ICP备12345678号」；留空则不渲染

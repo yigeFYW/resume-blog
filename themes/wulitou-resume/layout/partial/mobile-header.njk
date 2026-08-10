@@ -1,0 +1,27 @@
+{% set resume = wulitou_resume() %}
+<header class="wr-header" data-wr-header>
+  <button class="wr-header__btn"
+          type="button"
+          data-wr-drawer-open
+          aria-controls="wr-drawer"
+          aria-expanded="false">
+    <span class="wr-header__btn-icon" aria-hidden="true">{% set iconName = 'menu' %}{% include 'partial/icons.njk' %}</span>
+    <span class="wr-visually-hidden">打开导航菜单</span>
+  </button>
+
+  <p class="wr-header__title">{{ resume.name | default(config.title) }}</p>
+
+  {% set topContact = resume.contacts | first %}
+  {% if topContact and topContact.href %}
+  <a class="wr-header__btn"
+     href="{{ topContact.href }}"
+     {% if topContact.external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+    <span class="wr-header__btn-icon" aria-hidden="true">{% set iconName = topContact.icon %}{% include 'partial/icons.njk' %}</span>
+    <span class="wr-visually-hidden">{{ topContact.label }}：{{ topContact.text }}</span>
+  </a>
+  {% else %}
+  <span class="wr-header__btn wr-header__btn--static" aria-hidden="true">
+    <span class="wr-header__btn-icon">{% set iconName = 'star' %}{% include 'partial/icons.njk' %}</span>
+  </span>
+  {% endif %}
+</header>

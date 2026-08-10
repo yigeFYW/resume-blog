@@ -1,0 +1,138 @@
+{% set resume = wulitou_resume() %}<!DOCTYPE html>
+<html lang="{{ config.language | default('zh-CN') }}">
+{% include 'partial/head.njk' %}
+<body class="wr-body"
+      data-wr-root
+      data-wr-smooth-scroll="{{ 'false' if theme.theme_options.smooth_scroll === false else 'true' }}"
+      data-wr-animate-skills="{{ 'false' if theme.theme_options.animate_skills === false else 'true' }}">
+  <a class="wr-skip-link" href="#main">跳到主要内容</a>
+
+  {% include 'partial/mobile-header.njk' %}
+  {% include 'partial/drawer.njk' %}
+
+  <div class="wr-shell">
+    {% include 'partial/sidebar.njk' %}
+
+    <main class="wr-main" id="main">
+      {{ body }}
+    </main>
+  </div>
+
+  <script src="{{ wulitou_url('/js/theme.js') }}" defer></script>
+
+  <script>
+    (function () {
+      // Code block enhancement: add macOS-style header with language label
+      // and copy button to every <figure class="highlight"> element.
+      var blocks = document.querySelectorAll('figure.highlight');
+      if (!blocks.length) return;
+
+      var copyIcon = '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+      var checkIcon = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+      var langMap = {
+        js: 'JavaScript', javascript: 'JavaScript', ts: 'TypeScript',
+        typescript: 'TypeScript', py: 'Python', python: 'Python',
+        bash: 'Bash', sh: 'Shell', shell: 'Shell', yaml: 'YAML',
+        yml: 'YAML', json: 'JSON', html: 'HTML', css: 'CSS',
+        scss: 'SCSS', sql: 'SQL', go: 'Go', rs: 'Rust', rust: 'Rust',
+        java: 'Java', c: 'C', cpp: 'C++', csharp: 'C#', cs: 'C#',
+        php: 'PHP', rb: 'Ruby', ruby: 'Ruby', swift: 'Swift',
+        kt: 'Kotlin', kotlin: 'Kotlin', dart: 'Dart', lua: 'Lua',
+        dockerfile: 'Dockerfile', makefile: 'Makefile', gradle: 'Gradle',
+        xml: 'XML', md: 'Markdown', markdown: 'Markdown', plaintext: 'Text'
+      };
+
+      blocks.forEach(function (fig) {
+        // Extract language from class list
+        var lang = '';
+        fig.classList.forEach(function (c) {
+          if (c !== 'highlight' && c !== 'plaintext') lang = c;
+        });
+        var langLabel = langMap[lang] || lang || 'Code';
+
+        // Build header
+        var header = document.createElement('div');
+        header.className = 'wr-code-header';
+        header.innerHTML =
+          '<div class="wr-code-dots"><span></span><span></span><span></span></div>' +
+          '<span class="wr-code-lang">' + langLabel + '</span>' +
+          '<button class="wr-code-copy" type="button" aria-label="复制代码">' +
+          copyIcon + '<span>复制</span></button>';
+        fig.insertBefore(header, fig.firstChild);
+
+        // Copy functionality
+        var btn = header.querySelector('.wr-code-copy');
+        btn.addEventListener('click', function () {
+          var pre = fig.querySelector('pre');
+          if (!pre) return;
+          var text = pre.innerText;
+
+          var done = function () {
+            btn.classList.add('copied');
+            btn.innerHTML = checkIcon + '<span>已复制</span>';
+            setTimeout(function () {
+              btn.classList.remove('copied');
+              btn.innerHTML = copyIcon + '<span>复制</span>';
+            }, 2000);
+          };
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(function () {
+              fallbackCopy(text, done);
+            });
+          } else {
+            fallbackCopy(text, done);
+          }
+        });
+      });
+
+      function fallbackCopy(text, cb) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        cb && cb();
+      }
+    })();
+  </script>
+
+  {% if theme.cdn and theme.cdn.fancybox and theme.cdn.fancybox.js %}
+  <script src="{{ theme.cdn.jquery }}"></script>
+  <script src="{{ theme.cdn.fancybox.js }}"></script>
+  <script>
+    (function () {
+      // 将 <fancybox> 中的 <img> 包裹为 <a data-fancybox="gallery">，
+      // Fancybox v3 会自动检测该属性并初始化灯箱预览。
+      var galleries = document.querySelectorAll('fancybox');
+      galleries.forEach(function (box) {
+        box.querySelectorAll('img').forEach(function (img) {
+          var src = img.getAttribute('src') || img.getAttribute('data-original') || '';
+          if (!src) return;
+          var link = document.createElement('a');
+          link.setAttribute('data-fancybox', 'gallery');
+          link.setAttribute('href', src);
+          img.parentNode.insertBefore(link, img);
+          link.appendChild(img);
+        });
+      });
+
+      // 全局默认配置：手机端去除边距实现全屏预览，支持循环浏览。
+      // 即使页面没有 <fancybox> 标签（如仅有微信二维码），也需要设置。
+      if (window.jQuery && typeof $.fancybox !== 'undefined') {
+        $.fancybox.defaults.loop = true;
+        $.fancybox.defaults.mobile = {
+          margin: 0,
+          padding: 0,
+          clickContent: 'next',
+          transition: 'fade'
+        };
+      }
+    })();
+  </script>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% set resume = wulitou_resume() %}
+{% if resume.skills.length %}
+<section class="wr-section" id="skills" aria-labelledby="wr-skills-title">
+  <div class="wr-card wr-card--flush">
+    <div class="wr-section__head">
+      <h2 class="wr-section__title" id="wr-skills-title">
+        <span class="wr-section__badge">{% set iconName = 'star' %}{% include 'partial/icons.njk' %}</span>
+        <span class="wr-section__label wr-section__label--wavy">专业技能</span>
+      </h2>
+      {% if resume.skillsNote %}
+      <p class="wr-section__note">
+        {{ resume.skillsNote }}
+        {% if theme.theme_options.decorations !== false %}
+        <img src="{{ wulitou_asset('sparkles-bottom.png') }}" alt="" aria-hidden="true" width="18" height="14" loading="lazy" decoding="async">
+        {% endif %}
+      </p>
+      {% endif %}
+    </div>
+
+    <ul class="wr-skills">
+      {% for skill in resume.skills %}
+      <li class="wr-skill">
+        <div class="wr-skill__head">
+          <span class="wr-skill__icon" aria-hidden="true">{% set iconName = skill.icon %}{% include 'partial/icons.njk' %}</span>
+          <span class="wr-skill__name">{{ skill.name }}</span>
+        </div>
+
+        {% if skill.level !== null %}
+        <div class="wr-skill__meter">
+          <div class="wr-skill__track"
+               role="progressbar"
+               aria-valuenow="{{ skill.level }}"
+               aria-valuemin="0"
+               aria-valuemax="100"
+               aria-label="{{ skill.name }} 熟练度">
+            <span class="wr-skill__fill" data-wr-skill-fill style="--wr-skill-level: {{ skill.level }}%"></span>
+          </div>
+          <span class="wr-skill__value">{{ skill.level }}%</span>
+        </div>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}

@@ -1,0 +1,90 @@
+{% set resume = wulitou_resume() %}
+{# Decorations only make sense once the hero has real content to decorate. #}
+{% set heroHasBody = resume.hero.descriptionHtml or resume.contacts.length or resume.hero.hasImage %}
+{% set deco = theme.theme_options.decorations !== false and heroHasBody %}
+<section class="wr-section wr-hero" id="home">
+  <div class="wr-card wr-hero__card{{ ' wr-hero__card--bare' if not heroHasBody }}">
+    {% if deco %}
+    <div class="wr-hero__deco" aria-hidden="true">
+      {# The sparkle overlays the illustration; without one it would sit on the H1. #}
+      {% if resume.hero.hasImage %}
+      <img class="wr-deco wr-deco--sparkles" src="{{ wulitou_asset('sparkles-top.png') }}" alt="" width="80" height="76" loading="lazy" decoding="async">
+      {% endif %}
+      <img class="wr-deco wr-deco--rocket" src="{{ wulitou_asset('rocket.png') }}" alt="" width="86" height="88" loading="lazy" decoding="async">
+      <img class="wr-deco wr-deco--star" src="{{ wulitou_asset('star.png') }}" alt="" width="46" height="39" loading="lazy" decoding="async">
+      <img class="wr-deco wr-deco--waves" src="{{ wulitou_asset('waves.png') }}" alt="" width="88" height="47" loading="lazy" decoding="async">
+    </div>
+    {% endif %}
+
+    <div class="wr-hero__grid{{ ' wr-hero__grid--split' if resume.hero.hasImage }}">
+      {% if resume.hero.hasImage %}
+      <div class="wr-hero__figure">
+        <img class="wr-hero__img"
+             src="{{ wulitou_url(resume.hero.image) }}"
+             alt="{{ resume.hero.imageAlt }}"
+             width="490" height="305"
+             decoding="async"
+             fetchpriority="high">
+
+        {% if deco %}
+        <img class="wr-hero__monster" src="{{ wulitou_asset('green-monster.png') }}" alt="" aria-hidden="true" width="76" height="76" loading="lazy" decoding="async">
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="wr-hero__body">
+        {% if resume.hero.bubble %}
+        <p class="wr-hero__bubble">{{ resume.hero.bubble }}</p>
+        {% endif %}
+
+        <h1 class="wr-hero__title">
+          {%- if resume.hero.prefix %}{{ resume.hero.prefix }}{% endif -%}
+          {%- if resume.hero.highlight %}<span class="u-name">{{ resume.hero.highlight }}</span>{% endif -%}
+          {%- if resume.hero.suffix %}{{ resume.hero.suffix }}{% endif -%}
+        </h1>
+
+        {% if resume.hero.descriptionHtml %}
+        <p class="wr-hero__lead">{{ resume.hero.descriptionHtml }}</p>
+        {% endif %}
+
+        {% if resume.contacts.length %}
+        <ul class="wr-contact-grid wr-contact-grid--hero">
+          {% for item in resume.contacts %}
+          <li class="wr-contact">
+            {% if item.href %}
+            <a class="wr-contact__inner"
+               href="{{ item.href }}"
+               {% if item.external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+              <span class="wr-contact__icon" aria-hidden="true">{% set iconName = item.icon %}{% include 'partial/icons.njk' %}</span>
+              <span class="wr-contact__text">
+                <span class="wr-contact__label">{{ item.label }}</span>
+                <span class="wr-contact__value">{{ wulitou_breakable(item.text) }}</span>
+              </span>
+            </a>
+            {% elif item.qr %}
+            <a class="wr-contact__inner"
+               data-fancybox="wechat-qr"
+               href="{{ wulitou_url(item.qr) }}">
+              <span class="wr-contact__icon" aria-hidden="true">{% set iconName = item.icon %}{% include 'partial/icons.njk' %}</span>
+              <span class="wr-contact__text">
+                <span class="wr-contact__label">{{ item.label }}</span>
+                <span class="wr-contact__value">{{ wulitou_breakable(item.text) }}</span>
+              </span>
+            </a>
+            {% else %}
+            <span class="wr-contact__inner">
+              <span class="wr-contact__icon" aria-hidden="true">{% set iconName = item.icon %}{% include 'partial/icons.njk' %}</span>
+              <span class="wr-contact__text">
+                <span class="wr-contact__label">{{ item.label }}</span>
+                <span class="wr-contact__value">{{ wulitou_breakable(item.text) }}</span>
+              </span>
+            </span>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

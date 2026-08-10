@@ -1,0 +1,317 @@
+// Code block component — Hexo built-in highlight.js output.
+// HTML structure:
+//   <figure class="highlight [lang]">
+//     <table><tr><td class="code"><pre>
+//       <span class="line"><span class="keyword">...</span></span><br>...
+//     </pre></td></tr></table>
+//   </figure>
+//
+// JS adds a header bar with traffic-light dots, language label and copy button
+// as the first child of <figure>.
+
+@use 'tokens';
+
+// ── Monospace stack ──────────────────────────────────────────────
+$font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code',
+  Consolas, 'Liberation Mono', Menlo, monospace;
+
+// ── Dark palette (warm-tuned to match the cream page) ─────────────
+$code-bg: #1a1814;
+$code-bg-header: #13110d;
+$code-text: #e8e2d4;
+$code-text-dim: rgba(232, 226, 212, 0.45);
+
+$code-red: #f07178;
+$code-orange: #f78c6c;
+$code-yellow: #ffcb6b;
+$code-green: #c3e88d;
+$code-blue: #82aaff;
+$code-purple: #c792ea;
+$code-cyan: #89ddff;
+$code-gray: rgba(232, 226, 212, 0.3);
+
+// ── figure.highlight container ───────────────────────────────────
+.wr-prose,
+.wr-detail__body {
+  figure.highlight {
+    position: relative;
+    margin: var(--space-6) 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: $code-bg;
+    box-shadow: 0 4px 20px rgba(30, 24, 16, 0.15),
+      0 1px 3px rgba(30, 24, 16, 0.08);
+    font-family: $font-mono;
+    font-size: 13px;
+    line-height: 1.45;
+
+    // ── Header bar (added by JS) ────────────────────────────────
+    .wr-code-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      height: 36px;
+      padding: 0 var(--space-4);
+      background: $code-bg-header;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+      .wr-code-dots {
+        display: flex;
+        gap: 7px;
+        flex-shrink: 0;
+
+        span {
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+        }
+        span:nth-child(1) { background: #ff5f57; }
+        span:nth-child(2) { background: #febc2e; }
+        span:nth-child(3) { background: #28c840; }
+      }
+
+      .wr-code-lang {
+        margin-left: auto;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: $code-text-dim;
+        text-transform: lowercase;
+        user-select: none;
+      }
+
+      .wr-code-copy {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        background: transparent;
+        color: $code-text-dim;
+        font-family: $font-mono;
+        font-size: 11px;
+        cursor: pointer;
+        transition: color var(--duration-fast) var(--ease-out),
+          border-color var(--duration-fast) var(--ease-out),
+          background var(--duration-fast) var(--ease-out);
+
+        svg {
+          width: 13px;
+          height: 13px;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.8;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        &:hover {
+          color: $code-text;
+          border-color: rgba(255, 255, 255, 0.25);
+          background: rgba(255, 255, 255, 0.04);
+        }
+
+        &.copied {
+          color: $code-green;
+          border-color: rgba(195, 232, 141, 0.3);
+        }
+      }
+    }
+
+    // ── Code content area ────────────────────────────────────────
+    table {
+      width: 100%;
+      border: none;
+      border-collapse: collapse;
+      background: transparent;
+    }
+
+    td {
+      border: none;
+      padding: 0;
+      vertical-align: top;
+    }
+
+    pre {
+      margin: 0;
+      padding: var(--space-4);
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      color: $code-text;
+      font-family: $font-mono;
+      font-size: 13px;
+      line-height: 1.45;
+      overflow-x: auto;
+      white-space: pre;
+      tab-size: 2;
+      -moz-tab-size: 2;
+
+      // ── Custom scrollbar (WebKit) ──────────────────────────────
+      &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: rgba(232, 226, 212, 0.15);
+        border-radius: 3px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: rgba(232, 226, 212, 0.3);
+        background-clip: padding-box;
+      }
+      &::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+
+      // ── Custom scrollbar (Firefox) ─────────────────────────────
+      scrollbar-width: thin;
+      scrollbar-color: rgba(232, 226, 212, 0.15) transparent;
+    }
+
+    // Reset .line spans — they're just line wrappers, no extra styling
+    .line {
+      display: block;
+      min-height: 1.45em;
+    }
+
+    // Hide <br> — .line is already display:block, so <br> only adds
+    // unwanted extra spacing between code lines
+    br {
+      display: none;
+    }
+
+    // ── Syntax highlighting tokens ───────────────────────────────
+    .keyword {
+      color: $code-purple;
+      font-style: italic;
+    }
+    .string,
+    .subst {
+      color: $code-green;
+    }
+    .number {
+      color: $code-orange;
+    }
+    .comment {
+      color: $code-gray;
+      font-style: italic;
+    }
+    .title {
+      &.function_ {
+        color: $code-blue;
+      }
+      &.class_ {
+        color: $code-yellow;
+      }
+    }
+    .params {
+      color: $code-text;
+    }
+    .variable {
+      &.language_ {
+        color: $code-red;
+        font-style: italic;
+      }
+    }
+    .property {
+      color: $code-red;
+    }
+    .attr {
+      color: $code-yellow;
+    }
+    .built_in {
+      color: $code-cyan;
+    }
+    .meta {
+      color: $code-gray;
+    }
+    .tag {
+      color: $code-red;
+    }
+    .name {
+      color: $code-red;
+    }
+    .literal {
+      color: $code-orange;
+    }
+    .symbol {
+      color: $code-green;
+    }
+    .regexp {
+      color: $code-green;
+    }
+    .selector {
+      color: $code-green;
+    }
+    .bullet {
+      color: $code-orange;
+    }
+    .addition {
+      color: $code-green;
+      background: rgba(195, 232, 141, 0.08);
+    }
+    .deletion {
+      color: $code-red;
+      background: rgba(240, 113, 120, 0.08);
+    }
+    .template-variable {
+      color: $code-cyan;
+    }
+    .type {
+      color: $code-yellow;
+    }
+    .link {
+      color: $code-blue;
+      text-decoration: underline;
+    }
+
+    // ── Mobile: slightly smaller font, tighter padding ──────────
+    @media (max-width: 425px) {
+      font-size: 12px;
+
+      pre {
+        padding: var(--space-3);
+        font-size: 12px;
+      }
+
+      .wr-code-header {
+        height: 32px;
+        padding: 0 var(--space-3);
+
+        .wr-code-dots span {
+          width: 10px;
+          height: 10px;
+        }
+
+        .wr-code-lang {
+          font-size: 10px;
+        }
+
+        .wr-code-copy {
+          font-size: 10px;
+          padding: 2px 6px;
+        }
+      }
+    }
+  }
+
+  // ── Inline code (already partially styled in _project-detail, refine) ──
+  :not(pre) > code {
+    font-family: $font-mono;
+    font-size: 0.88em;
+    padding: 2px 6px;
+    background: var(--color-surface-cream);
+    border: 1px solid var(--color-border-soft);
+    border-radius: 6px;
+    color: var(--color-orange);
+    white-space: nowrap;
+  }
+}

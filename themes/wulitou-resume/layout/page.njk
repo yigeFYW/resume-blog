@@ -1,0 +1,31 @@
+{# Pages under source/<project_dir>/ are project detail pages, so they render
+   the detail view instead of a second copy of the resume. #}
+{% if wulitou_is_project_page(page) %}
+{% include 'partial/project-detail.njk' %}
+{% include 'partial/footer.njk' %}
+{% else %}
+{% set resume = wulitou_resume() %}
+{% include 'partial/hero.njk' %}
+
+<div class="wr-row wr-row--split wr-row--skills-about">
+  {% include 'partial/skills.njk' %}
+  {% include 'partial/about.njk' %}
+</div>
+
+<div class="wr-row wr-row--split wr-row--experience-projects">
+  {% include 'partial/experience.njk' %}
+  {% include 'partial/projects.njk' %}
+</div>
+
+{% include 'partial/education.njk' %}
+
+{% if page.content %}
+<section class="wr-section" id="detail">
+  <article class="wr-card wr-prose">
+    {{ page.content }}
+  </article>
+</section>
+{% endif %}
+
+{% include 'partial/footer.njk' %}
+{% endif %}

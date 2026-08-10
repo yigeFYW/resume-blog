@@ -1,0 +1,105 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// <fancybox> gallery — raw HTML tag rendered from Markdown content.
+// After the JS init script wraps each <img> in <a data-fancybox="gallery">,
+// the structure becomes:
+//
+//   <fancybox data-layout="grid" data-cols="3" data-gap="md">
+//     <a data-fancybox="gallery" href="...">
+//       <img src="...">
+//     </a>
+//     ...
+//   </fancybox>
+//
+// Available attributes:
+//   data-layout  "flex" (default) | "grid"
+//   data-cols    1–6  (column count; flex mode controls basis, grid mode controls columns)
+//   data-gap     "none" | "sm" (default) | "md" | "lg"
+
+wr-prose fancybox,
+.wr-prose fancybox,
+fancybox {
+  // CSS custom property consumed by both flex and grid modes.
+  --wr-cols: 3;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: var(--space-4) 0;
+
+  a {
+    display: block;
+    flex: 1 1 0; // equal-width columns in flex mode
+    min-width: 0;
+    line-height: 0; // remove inline gap
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    cursor: zoom-in;
+
+    @include hover-capable {
+      &:hover {
+        box-shadow: var(--shadow-card-hover);
+      }
+    }
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    transition: opacity var(--duration-fast) var(--ease-out);
+
+    @include hover-capable {
+      a:hover & {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  // ---- data-cols: column count (1-6) ----
+  &[data-cols='1'] { --wr-cols: 1; }
+  &[data-cols='2'] { --wr-cols: 2; }
+  &[data-cols='3'] { --wr-cols: 3; }
+  &[data-cols='4'] { --wr-cols: 4; }
+  &[data-cols='5'] { --wr-cols: 5; }
+  &[data-cols='6'] { --wr-cols: 6; }
+
+  // ---- data-gap: spacing between images ----
+  &[data-gap='none'] { gap: 0; }
+  &[data-gap='sm']   { gap: var(--space-1); }
+  &[data-gap='md']   { gap: var(--space-2); }
+  &[data-gap='lg']   { gap: var(--space-4); }
+
+  // ---- data-layout="grid": CSS Grid mode ----
+  &[data-layout='grid'] {
+    display: grid;
+    grid-template-columns: repeat(var(--wr-cols), minmax(0, 1fr));
+
+    a {
+      flex: none; // reset flex for grid context
+    }
+  }
+
+  // ---- Mobile: tighter gaps, still readable ----
+  @media screen and (max-width: 425px) {
+    gap: 2px;
+
+    &[data-gap='md'] { gap: var(--space-1); }
+    &[data-gap='lg'] { gap: var(--space-2); }
+
+    // On very narrow screens, cap columns at 3 to avoid thumbnails becoming
+    // too small to tap.
+    &[data-cols='4'],
+    &[data-cols='5'],
+    &[data-cols='6'] {
+      --wr-cols: 3;
+    }
+
+    img {
+      border-radius: 6px;
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{% set resume = wulitou_resume() %}
+{% set detail = wulitou_project_detail(page) %}
+
+<article class="wr-section wr-detail" aria-labelledby="wr-detail-title">
+  <p class="wr-detail__back-row">
+    <a class="wr-back wr-back--home" href="{{ wulitou_url(detail.homeHref) }}">
+      <span class="wr-back__icon" aria-hidden="true">{% set iconName = 'arrow-left' %}{% include 'partial/icons.njk' %}</span>
+      {{ detail.homeLabel }}
+    </a>
+    <a class="wr-back" href="{{ wulitou_url(detail.backHref) }}">
+      <span class="wr-back__icon" aria-hidden="true">{% set iconName = 'folder' %}{% include 'partial/icons.njk' %}</span>
+      {{ detail.backLabel }}
+    </a>
+  </p>
+
+  <div class="wr-card wr-detail__card">
+    {% if theme.theme_options.decorations !== false %}
+    <img class="wr-deco wr-deco--detail-star" src="{{ wulitou_asset('star.png') }}" alt="" aria-hidden="true" width="44" height="37" loading="lazy" decoding="async">
+    {% endif %}
+
+    {% if detail.hasCover %}
+    <div class="wr-detail__cover">
+      <img src="{{ wulitou_url(detail.cover) }}"
+           alt="{{ detail.coverAlt }}"
+           width="1200" height="675"
+           decoding="async">
+    </div>
+    {% endif %}
+
+    <header class="wr-detail__head">
+      <h1 class="wr-detail__title" id="wr-detail-title">{{ detail.name }}</h1>
+
+      {% if detail.description %}
+      <p class="wr-detail__lead">{{ detail.description }}</p>
+      {% endif %}
+
+      {% if detail.role or detail.period %}
+      <ul class="wr-detail__meta">
+        {% if detail.role %}
+        <li class="wr-detail__meta-item">
+          <span class="wr-detail__meta-label">角色</span>
+          <span class="wr-detail__meta-value">{{ detail.role }}</span>
+        </li>
+        {% endif %}
+        {% if detail.period %}
+        <li class="wr-detail__meta-item">
+          <span class="wr-detail__meta-label">周期</span>
+          <span class="wr-detail__meta-value">{{ detail.period }}</span>
+        </li>
+        {% endif %}
+      </ul>
+      {% endif %}
+
+      {% if detail.tags.length %}
+      <ul class="wr-tags">
+        {% for tag in detail.tags %}<li class="wr-tag">{{ tag }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if detail.demo or detail.github %}
+      <p class="wr-detail__actions">
+        {% if detail.demo %}
+        <a class="wr-project__action wr-project__action--lg" href="{{ detail.demo }}" target="_blank" rel="noopener noreferrer">
+          在线体验<span class="wr-visually-hidden">（{{ detail.name }}，新窗口打开）</span>
+          <span aria-hidden="true">{% set iconName = 'external' %}{% include 'partial/icons.njk' %}</span>
+        </a>
+        {% endif %}
+        {% if detail.github %}
+        <a class="wr-project__action wr-project__action--lg" href="{{ detail.github }}" target="_blank" rel="noopener noreferrer">
+          GitHub<span class="wr-visually-hidden">（{{ detail.name }}，新窗口打开）</span>
+          <span aria-hidden="true">{% set iconName = 'external' %}{% include 'partial/icons.njk' %}</span>
+        </a>
+        {% endif %}
+      </p>
+      {% endif %}
+    </header>
+
+    {% if detail.highlights.length or detail.stack.length %}
+    <div class="wr-detail__facts">
+      {% if detail.highlights.length %}
+      <section class="wr-detail__fact" aria-labelledby="wr-detail-highlights">
+        <h2 class="wr-detail__fact-title" id="wr-detail-highlights">
+          <span class="wr-section__badge">{% set iconName = 'sparkle' %}{% include 'partial/icons.njk' %}</span>
+          项目亮点
+        </h2>
+        <ul class="wr-detail__list">
+          {% for line in detail.highlights %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if detail.stack.length %}
+      <section class="wr-detail__fact" aria-labelledby="wr-detail-stack">
+        <h2 class="wr-detail__fact-title" id="wr-detail-stack">
+          <span class="wr-section__badge">{% set iconName = 'code' %}{% include 'partial/icons.njk' %}</span>
+          技术栈
+        </h2>
+        <ul class="wr-detail__list">
+          {% for line in detail.stack %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if page.content %}
+    <div class="wr-prose wr-detail__body">
+      {{ page.content }}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if detail.prev or detail.next %}
+  <nav class="wr-detail__pager" aria-label="项目切换">
+    {% if detail.prev %}
+    <a class="wr-detail__pager-link wr-detail__pager-link--prev" href="{{ wulitou_url(detail.prev.href) }}" rel="prev">
+      <span class="wr-detail__pager-label">上一个项目</span>
+      <span class="wr-detail__pager-name">{{ detail.prev.name }}</span>
+    </a>
+    {% endif %}
+    {% if detail.next %}
+    <a class="wr-detail__pager-link wr-detail__pager-link--next" href="{{ wulitou_url(detail.next.href) }}" rel="next">
+      <span class="wr-detail__pager-label">下一个项目</span>
+      <span class="wr-detail__pager-name">{{ detail.next.name }}</span>
+    </a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</article>

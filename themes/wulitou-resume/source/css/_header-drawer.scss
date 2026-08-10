@@ -1,0 +1,237 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Sticky header replaces the sidebar below 1024px (tablet + mobile).
+.wr-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: var(--tap-target) minmax(0, 1fr) var(--tap-target);
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--header-height);
+  padding: 0 var(--space-3);
+  background: rgba(255, 253, 247, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+
+  @include desktop-up {
+    display: none;
+  }
+}
+
+.wr-header__btn {
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  transition: background-color var(--duration-fast) var(--ease-out);
+
+  @include hover-capable {
+    &:hover {
+      background: rgba(255, 216, 92, 0.35);
+    }
+  }
+}
+
+.wr-header__btn--static {
+  cursor: default;
+}
+
+.wr-header__btn-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.wr-header__title {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+// Drawer
+.wr-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(28, 22, 8, 0.45);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+
+  &.is-open {
+    opacity: 1;
+  }
+
+  @include desktop-up {
+    display: none;
+  }
+}
+
+.wr-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  width: min(82vw, 320px);
+  padding: var(--space-4);
+  background: linear-gradient(170deg, var(--color-yellow-soft), var(--color-yellow));
+  border-right: 2px solid #f0c53d;
+  border-radius: 0 var(--radius-sidebar) var(--radius-sidebar) 0;
+  box-shadow: var(--shadow-drawer);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  @include no-scrollbar;
+  transform: translateX(-102%);
+  transition: transform var(--duration-base) var(--ease-out);
+
+  &.is-open {
+    transform: translateX(0);
+  }
+
+  @include desktop-up {
+    display: none;
+  }
+}
+
+// `hidden` must win over the flex display above.
+.wr-drawer[hidden],
+.wr-drawer-overlay[hidden] {
+  display: none;
+}
+
+.wr-drawer__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+  border-bottom: 2px dashed rgba(22, 22, 22, 0.18);
+}
+
+.wr-drawer__profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.wr-drawer__avatar {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-surface);
+}
+
+.wr-drawer__meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  strong {
+    font-size: 16px;
+    font-weight: 800;
+    @include wrap-anywhere;
+  }
+
+  span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7a5c05;
+    @include wrap-anywhere;
+  }
+}
+
+.wr-drawer__close {
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  margin-left: auto;
+  flex: 0 0 auto;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.6);
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.wr-drawer__nav {
+  margin-top: var(--space-4);
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}
+
+.wr-drawer__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-target);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 700;
+  color: #3d2c00;
+  @include wrap-anywhere;
+
+  &.is-active {
+    background: var(--color-surface);
+    color: var(--color-orange);
+  }
+}
+
+.wr-drawer__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.wr-drawer__deco {
+  width: 84px;
+  height: auto;
+  margin: auto auto 0;
+  padding-top: var(--space-6);
+  pointer-events: none;
+  user-select: none;
+}
+
+// Scroll lock: applied to <html> by JS while the drawer is open. `position:
+// fixed` on body would lose the scroll position, so overflow is used instead
+// with the offset preserved in a custom property.
+.wr-locked {
+  overflow: hidden;
+  // Prevents layout shift when the scrollbar disappears on desktop-ish widths.
+  padding-right: var(--wr-scrollbar-width, 0px);
+}

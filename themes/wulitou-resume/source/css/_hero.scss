@@ -1,0 +1,267 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+.wr-hero__card {
+  overflow: hidden;
+}
+
+// Name-only resume: centre the greeting instead of left-aligning it in a
+// nearly empty card.
+.wr-hero__card--bare .wr-hero__body {
+  text-align: center;
+}
+
+// Mobile: vertical stack. Desktop: illustration 42% / body 58% per DESIGN.md §6.
+// The two-column rule needs an explicit class (not :has) so it also works on
+// browsers without :has support.
+.wr-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+
+  @include desktop-up {
+    gap: var(--space-6);
+  }
+}
+
+.wr-hero__grid--split {
+  @include desktop-up {
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+  }
+}
+
+.wr-hero__figure {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.wr-hero__img {
+  width: 100%;
+  max-height: 300px;
+  // max-width: 300px;
+  // height: auto;
+  // Reserves space before the PNG loads so the hero never shifts.
+  // aspect-ratio: 490 / 305;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  // box-shadow: var(--shadow-card);
+
+  @include desktop-up {
+    max-width: 100%;
+  }
+}
+
+.wr-hero__monster {
+  position: absolute;
+  left: 2%;
+  bottom: -2px;
+  width: 54px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+
+  @include desktop-up {
+    width: 68px;
+  }
+}
+
+.wr-hero__body {
+  min-width: 0;
+}
+
+// Speech bubble with a hand-drawn tail.
+.wr-hero__bubble {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-yellow-soft);
+  border: 2px solid var(--color-text);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 700;
+  @include wrap-anywhere;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 22px;
+    bottom: -9px;
+    width: 12px;
+    height: 12px;
+    background: var(--color-yellow-soft);
+    border-right: 2px solid var(--color-text);
+    border-bottom: 2px solid var(--color-text);
+    transform: rotate(38deg) skew(-8deg);
+  }
+
+  @include desktop-up {
+    font-size: 14px;
+  }
+}
+
+// Contact grid: 1 col mobile, 2 cols tablet, 4 cols desktop.
+.wr-contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+
+  @include tablet-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.wr-contact-grid--hero {
+  @include wide-up {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+}
+
+.wr-contact {
+  min-width: 0;
+}
+
+.wr-contact__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-target);
+  height: 100%;
+  padding: var(--space-3);
+  @include tile;
+  border-radius: var(--radius-md);
+  min-width: 0;
+  transition: border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+a.wr-contact__inner {
+  @include hover-capable {
+    &:hover {
+      border-color: var(--color-yellow-deep);
+      box-shadow: var(--shadow-card);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.wr-contact__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.wr-contact__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.wr-contact__label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.wr-contact__value {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  @include wrap-anywhere;
+}
+
+.wr-contact__ext {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--color-text-muted);
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Hero decoration layer. Positions are percentage-based so nothing escapes the
+// card and creates horizontal scroll.
+.wr-hero__deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.wr-deco--sparkles {
+  top: 8px;
+  left: 30%;
+  width: 42px;
+  opacity: 0.85;
+}
+
+.wr-deco--rocket {
+  top: 10px;
+  right: 12px;
+  width: 48px;
+
+  @include desktop-up {
+    width: 62px;
+  }
+}
+
+.wr-deco--star {
+  top: 46%;
+  right: 6px;
+  width: 26px;
+  opacity: 0.9;
+}
+
+.wr-deco--waves {
+  bottom: 10px;
+  right: 14px;
+  width: 54px;
+  opacity: 0.5;
+}
+
+@include motion-ok {
+  .wr-deco--rocket {
+    animation: wr-float 4.5s var(--ease-out) infinite;
+  }
+
+  .wr-deco--sparkles {
+    animation: wr-twinkle 3.6s var(--ease-out) infinite;
+  }
+}
+
+@keyframes wr-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(-4deg);
+  }
+}
+
+// Mobile keeps only the light decorations so the first screen stays readable.
+@include mobile-only {
+  .wr-deco--waves,
+  .wr-deco--star {
+    display: none;
+  }
+}

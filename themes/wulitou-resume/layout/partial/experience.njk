@@ -1,0 +1,46 @@
+{% set resume = wulitou_resume() %}
+{% if resume.experience.length %}
+<section class="wr-section" id="experience" aria-labelledby="wr-experience-title">
+  <div class="wr-card wr-card--flush">
+    {% if theme.theme_options.decorations !== false %}
+    <img class="wr-deco wr-deco--exp-rocket" src="{{ wulitou_asset('rocket.png') }}" alt="" aria-hidden="true" width="52" height="53" loading="lazy" decoding="async">
+    <img class="wr-deco wr-deco--ladybug" src="{{ wulitou_asset('ladybug.png') }}" alt="" aria-hidden="true" width="34" height="31" loading="lazy" decoding="async">
+    {% endif %}
+
+    <div class="wr-section__head">
+      <h2 class="wr-section__title" id="wr-experience-title">
+        <span class="wr-section__badge">{% set iconName = 'briefcase' %}{% include 'partial/icons.njk' %}</span>
+        工作经历
+      </h2>
+    </div>
+
+    <ol class="wr-timeline">
+      {% for item in resume.experience %}
+      <li class="wr-timeline__item">
+        <span class="wr-timeline__node" aria-hidden="true"></span>
+
+        <article class="wr-timeline__body">
+          <h3 class="wr-timeline__heading">
+            {% if item.period %}<span class="wr-timeline__period">{{ item.period }}</span>{% endif %}
+            {% if item.company %}<span class="wr-timeline__company">{{ item.company }}</span>{% endif %}
+            {% if item.position %}<span class="wr-timeline__position">{{ item.position }}</span>{% endif %}
+          </h3>
+
+          {% if item.lines.length %}
+          <div class="wr-timeline__desc">
+            {% for line in item.lines %}<p>{{ line }}</p>{% endfor %}
+          </div>
+          {% endif %}
+
+          {% if item.tags.length %}
+          <ul class="wr-tags">
+            {% for tag in item.tags %}<li class="wr-tag">{{ tag }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </article>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+{% endif %}

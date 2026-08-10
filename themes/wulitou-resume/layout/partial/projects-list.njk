@@ -1,0 +1,87 @@
+{% set resume = wulitou_resume() %}
+<section class="wr-section wr-projects-page" aria-labelledby="wr-projects-page-title">
+  <p class="wr-back-row">
+    <a class="wr-back wr-back--home" href="{{ wulitou_url('/') }}">
+      <span class="wr-back__icon" aria-hidden="true">{% set iconName = 'arrow-left' %}{% include 'partial/icons.njk' %}</span>
+      {{ resume.options.back_home_label }}
+    </a>
+  </p>
+
+  <div class="wr-card">
+    <div class="wr-section__head">
+      <h1 class="wr-section__title" id="wr-projects-page-title">
+        <span class="wr-section__badge">{% set iconName = 'folder' %}{% include 'partial/icons.njk' %}</span>
+        {{ resume.projects.listTitle }}
+      </h1>
+      <span class="wr-section__note">共 {{ resume.projects.items.length }} 个项目</span>
+    </div>
+
+    <ul class="wr-plist">
+      {% for project in resume.projects.items %}
+      <li class="wr-plist__item">
+        <article class="wr-prow">
+          {% if theme.theme_options.decorations !== false %}
+          <img class="wr-deco wr-prow__deco"
+               src="{{ wulitou_asset('star.png' if loop.index0 % 2 == 0 else 'heart.png') }}"
+               alt="" aria-hidden="true" width="44" height="37" loading="lazy" decoding="async">
+          {% endif %}
+
+          <div class="wr-prow__cover">
+            <img src="{{ wulitou_url(project.cover) }}"
+                 alt="{{ project.coverAlt if project.hasCover else '' }}"
+                 {% if not project.hasCover %}aria-hidden="true"{% endif %}
+                 width="480" height="270"
+                 loading="lazy"
+                 decoding="async">
+          </div>
+
+          <div class="wr-prow__head">
+            <h2 class="wr-prow__name">
+              {% if project.detailHref %}
+              <a href="{{ wulitou_url(project.detailHref) }}">{{ project.name }}</a>
+              {% elif project.primaryHref %}
+              <a href="{{ project.primaryHref }}" target="_blank" rel="noopener noreferrer">{{ project.name }}</a>
+              {% else %}
+              {{ project.name }}
+              {% endif %}
+            </h2>
+
+            {% if project.description %}
+            <p class="wr-prow__desc">{{ project.description }}</p>
+            {% endif %}
+          </div>
+
+          {% if project.tags.length %}
+          <ul class="wr-tags wr-prow__tags">
+            {% for tag in project.tags %}<li class="wr-tag">{{ tag }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+
+          {# Sibling links, never nested inside the title link. #}
+          {% if project.detailHref or project.demo or project.github %}
+          <p class="wr-prow__actions">
+            {% if project.detailHref %}
+            <a class="wr-btn" href="{{ wulitou_url(project.detailHref) }}">
+              查看详情<span class="wr-visually-hidden">：{{ project.name }}</span>
+            </a>
+            {% endif %}
+            {% if project.demo %}
+            <a class="wr-btn wr-btn--accent" href="{{ project.demo }}" target="_blank" rel="noopener noreferrer">
+              预览<span class="wr-visually-hidden">（{{ project.name }}，新窗口打开）</span>
+              <span aria-hidden="true">{% set iconName = 'external' %}{% include 'partial/icons.njk' %}</span>
+            </a>
+            {% endif %}
+            {% if project.github %}
+            <a class="wr-btn" href="{{ project.github }}" target="_blank" rel="noopener noreferrer">
+              GitHub<span class="wr-visually-hidden">（{{ project.name }}，新窗口打开）</span>
+              <span aria-hidden="true">{% set iconName = 'external' %}{% include 'partial/icons.njk' %}</span>
+            </a>
+            {% endif %}
+          </p>
+          {% endif %}
+        </article>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

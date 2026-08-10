@@ -6,6 +6,7 @@
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
+    "deploy:qiniu": "node deploy-qiniu.js",
     "deploy:vercel": "node deploy-vercel.js",
     "server": "hexo server"
   },
@@ -25,5 +26,9 @@
     "hexo-server": "^3.0.0",
     "hexo-theme-landscape": "^1.0.0",
     "live2d-widget-model-koharu": "^1.0.5"
+  },
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "qiniu": "^7.15.2"
   }
 }

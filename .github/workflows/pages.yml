@@ -21,11 +21,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 拉取 Hexo 主项目，同时拉取主题 submodule
+      # 1. 拉取 Hexo 主项目（主题源码已内置在仓库中）
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          submodules: recursive
+          submodules: false
 
       # 2. Node 环境
       - name: Setup Node.js

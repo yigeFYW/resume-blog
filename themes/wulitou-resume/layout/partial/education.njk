@@ -1,0 +1,30 @@
+{% set resume = wulitou_resume() %}
+{% if resume.education.length %}
+<section class="wr-section" id="education" aria-labelledby="wr-education-title">
+  <div class="wr-card">
+    <div class="wr-section__head">
+      <h2 class="wr-section__title" id="wr-education-title">
+        <span class="wr-section__badge">{% set iconName = 'graduation' %}{% include 'partial/icons.njk' %}</span>
+        教育经历
+      </h2>
+    </div>
+
+    <ul class="wr-education">
+      {% for item in resume.education %}
+      <li class="wr-education__item">
+        <div class="wr-education__head">
+          {% if item.period %}<span class="wr-education__period">{{ item.period }}</span>{% endif %}
+          {% if item.school %}<span class="wr-education__school">{{ item.school }}</span>{% endif %}
+          {% if item.major %}<span class="wr-education__major">{{ item.major }}</span>{% endif %}
+        </div>
+        {% if item.lines.length %}
+        <div class="wr-education__desc">
+          {% for line in item.lines %}<p>{{ line }}</p>{% endfor %}
+        </div>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}

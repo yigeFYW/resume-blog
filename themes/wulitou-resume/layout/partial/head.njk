@@ -1,0 +1,52 @@
+{% set resume = wulitou_resume() %}
+{% set siteTitle = config.title | default('') %}
+{% set pageName = page.title | default('') %}
+{%- if pageName -%}
+  {% set docTitle = pageName + ' | ' + (resume.name or siteTitle) %}
+{%- elif resume.name -%}
+  {% set docTitle = resume.name + (' · ' + resume.title if resume.title else '') + ' | 在线简历' %}
+{%- else -%}
+  {% set docTitle = siteTitle or '在线简历' %}
+{%- endif -%}
+{% set canonical = wulitou_canonical(url) %}
+{# A project detail page describes the project, not the whole resume. #}
+{% set metaDescription = page.description | default(resume.seo.description) %}
+{% set ogImage = page.cover | default(resume.seo.ogImage) %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="{{ '#FFD85C' }}">
+
+  <title>{{ docTitle }}</title>
+  {% if metaDescription %}<meta name="description" content="{{ metaDescription }}">{% endif %}
+  {% if resume.seo.keywords %}<meta name="keywords" content="{{ resume.seo.keywords }}">{% endif %}
+  {% if resume.name %}<meta name="author" content="{{ resume.name }}">{% endif %}
+  <meta name="robots" content="{{ theme.robots | default('index,follow') }}">
+  {% if canonical %}<link rel="canonical" href="{{ canonical }}">{% endif %}
+
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{ docTitle }}">
+  {% if metaDescription %}<meta property="og:description" content="{{ metaDescription }}">{% endif %}
+  {% if canonical %}<meta property="og:url" content="{{ canonical }}">{% endif %}
+  {% if siteTitle %}<meta property="og:site_name" content="{{ siteTitle }}">{% endif %}
+  <meta property="og:locale" content="{{ config.language | default('zh-CN') | replace('-', '_') }}">
+  {% if ogImage %}<meta property="og:image" content="{{ wulitou_abs_url(ogImage) }}">{% endif %}
+  {% if resume.name %}<meta property="profile:first_name" content="{{ resume.name }}">{% endif %}
+
+  <meta name="twitter:card" content="{{ 'summary_large_image' if ogImage else 'summary' }}">
+  <meta name="twitter:title" content="{{ docTitle }}">
+  {% if metaDescription %}<meta name="twitter:description" content="{{ metaDescription }}">{% endif %}
+  {% if ogImage %}<meta name="twitter:image" content="{{ wulitou_abs_url(ogImage) }}">{% endif %}
+  {% if resume.seo.twitterSite %}<meta name="twitter:site" content="{{ resume.seo.twitterSite }}">{% endif %}
+
+  {% if resume.avatar %}<link rel="icon" href="{{ wulitou_url(resume.avatar) }}">{% endif %}
+  <link rel="stylesheet" href="{{ wulitou_url('/css/style.css') }}">
+
+  {% if theme.cdn and theme.cdn.fancybox and theme.cdn.fancybox.css %}
+  <link rel="stylesheet" href="{{ theme.cdn.fancybox.css }}">
+  {% endif %}
+
+  {% if resume.hero.hasImage and not wulitou_is_project_page(page) %}<link rel="preload" as="image" href="{{ wulitou_url(resume.hero.image) }}">{% endif %}
+
+  <script type="application/ld+json">{{ wulitou_person_jsonld() }}</script>
+</head>

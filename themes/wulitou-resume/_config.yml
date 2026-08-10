@@ -1,0 +1,138 @@
+# hexo-theme-wulitou-resume
+# ---------------------------------------------------------------------------
+# 主题配置。请注意：
+#
+# 这里的 `resume:` 是「兜底层」，故意保持为空。
+# 真正的简历内容请写在站点的 data 文件里：
+#
+#     source/_data/resume.yml      （标准 Hexo 站点）
+#     src/_data/resume.yml         （本仓库 source_dir 为 src）
+#
+# 复制 source/_data/resume.example.yml 到上面的路径后修改即可。
+#
+# 优先级：站点 _data/resume.yml  >  本文件的 resume:  >  主题内置兜底
+#
+# 不要把示例人物的姓名/电话/邮箱写进本文件——那会让任何没有填写
+# 对应字段的用户「继承」到别人的联系方式。
+# ---------------------------------------------------------------------------
+
+# CDN 资源（可选插件：图片灯箱预览）
+cdn:
+  jquery: https://cdn.staticfile.org/jquery/3.5.0/jquery.min.js
+  fancybox:
+    css: https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css
+    js: https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js
+
+# 站点/主题行为
+theme_options:
+  # 导航栏是否显示节标题图标
+  nav_icons: true
+  # 是否启用卡通装饰层（关闭后页面变为纯净简历，正文完全不受影响）
+  decorations: true
+  # 技能进度条进入视口时是否播放动画（自动尊重 prefers-reduced-motion）
+  animate_skills: true
+  # 锚点平滑滚动（自动尊重 prefers-reduced-motion）
+  smooth_scroll: true
+  # 装饰素材目录（相对站点根，用户可整目录替换）
+  decoration_path: /images/decorations
+  # 项目卡片没有 cover 时使用的占位图
+  project_placeholder: /images/placeholder-project.svg
+  # 项目详情页目录：站点 source/<project_dir>/*.md 会渲染成详情页。
+  # 每篇 md 的 front-matter 支持：title / description / cover / tags /
+  # role / start / end / stack / highlights / demo / github / order / slug。
+  # 简历 projects.items 里写 slug（或标题一致）即可关联到对应详情页。
+  project_dir: project
+  # 详情页返回按钮文案
+  project_back_label: 返回项目作品
+  # 打开详情页时，左侧菜单固定高亮的导航锚点
+  project_nav_anchor: projects
+  # 是否生成独立的「项目作品」列表页（首页「更多项目」默认指向它）
+  projects_page: true
+  # 列表页路径（相对站点根，结尾带 / 会生成 index.html）
+  projects_page_path: projects/
+  # 列表页标题
+  projects_page_title: 项目作品
+  # 列表页/详情页的「返回首页」按钮文案
+  back_home_label: 返回首页
+
+# 导航（label 可自由改写，anchor 必须与 section id 对应）
+# 对应 Section 没有内容时，该导航项会自动隐藏。
+nav:
+  - { label: 首页, anchor: home, icon: home }
+  - { label: 个人简介, anchor: about, icon: user }
+  - { label: 专业技能, anchor: skills, icon: code }
+  - { label: 工作经历, anchor: experience, icon: briefcase }
+  - { label: 项目作品, anchor: projects, icon: folder }
+
+# 简历兜底数据。
+# 留空即可——请在站点 _data/resume.yml 中填写真实内容。
+# 只有当你想为整个主题设定一个默认值时才在这里填写。
+resume:
+  name: ''
+  avatar: ''
+  title: ''
+  slogan: ''
+
+  hero:
+    # 这些是纯文案模板，不含任何个人信息，可安全作为默认值。
+    prefix: 你好，我是
+    highlight: ''
+    suffix: '，'
+    description: ''
+    highlight_word: ''
+    image: ''
+    image_alt: ''
+    bubble: ''
+
+  contact:
+    phone: { value: '', visible: true }
+    email: { value: '', visible: true }
+    wechat: { value: '', visible: true }
+    github: { value: '', label: '', visible: true }
+
+  about:
+    title: 个人简介
+    content: ''
+    bubble: ''
+
+  skills_note: ''
+  skills: []
+  experience: []
+
+  projects:
+    more_label: 更多项目
+    more_link: ''
+    items: []
+
+  education: []
+
+  # ── 简历 PDF 下载 ──────────────────────────────────────────────────────
+  # 开启后，左侧边栏（手机端为抽屉菜单）底部会出现一个下载按钮。
+  #
+  #   enable:   true 才会渲染按钮。默认 false。
+  #   url:      PDF 地址。二选一：
+  #             · 站内文件 —— 把 PDF 放进站点 source/ 下（例如
+  #               source/files/resume.pdf），这里写 /files/resume.pdf。
+  #               点击直接下载，不会跳转页面。
+  #             · 外部链接 —— 写完整地址（https://...）。浏览器无法对跨域
+  #               文件强制下载，因此会改为新标签页打开。
+  #             留空则即使 enable: true 也不渲染按钮（避免 404 死链）。
+  #   label:    按钮文案，留空则用「下载简历 PDF」。
+  #   filename: 可选，指定下载后保存的文件名（如 一个放羊娃-前端简历.pdf）。
+  #             仅对站内文件生效。留空则用原文件名。
+  resume_file:
+    enable: false
+    url: ''
+    label: 下载简历 PDF
+    filename: ''
+
+  seo:
+    description: ''
+    keywords: ''
+    og_image: ''
+    twitter_site: ''
+
+  footer:
+    copyright: '©'
+    text: ''
+    icp: ''                                 # ICP 备案号，如「宁ICP备12345678号」；留空则不渲染

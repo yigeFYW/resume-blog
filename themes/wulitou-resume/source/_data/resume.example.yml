@@ -1,0 +1,186 @@
+# ---------------------------------------------------------------------------
+# hexo-theme-wulitou-resume — 简历数据示例
+#
+# 使用方法：
+#   1. 把本文件复制为 resume.yml，放在站点的 _data 目录下：
+#        标准 Hexo 站点   →  source/_data/resume.yml
+#        本仓库(source_dir: src)  →  src/_data/resume.yml
+#   2. 按注释改成你自己的内容。
+#   3. npx hexo clean && npx hexo generate
+#
+# 重要规则：
+#   * 任何字段留空 / 删除都是安全的，对应的 Section 会自动隐藏，
+#     不会出现「暂无数据」这类占位文案。
+#   * 不要修改主题目录里的 _config.yml 来放个人信息，升级主题会被覆盖。
+#   * description 既可以写一行字符串，也可以写成数组（渲染为多段）。
+# ---------------------------------------------------------------------------
+
+# ── 基本信息 ────────────────────────────────────────────────────────────────
+name: 一个放羊娃                              # 姓名，会出现在 Sidebar / Header / SEO
+title: 全栈工程师                        # 职位
+slogan: 爱整活的产品创造者                # 副标题；与 title 一起显示为两行
+
+# 头像。放在 站点 source/images/ 下，然后用站点绝对路径引用。
+# 主题自带一张示例头像：/images/avatar/avatar.png
+avatar: /images/avatar/avatar.png
+
+# ── Hero 首屏 ───────────────────────────────────────────────────────────────
+hero:
+  prefix: 你好，我是                     # H1 前缀
+  highlight: 一个放羊娃                        # H1 中高亮成蓝色的部分；留空则取 name
+  suffix: '，'                           # H1 后缀
+  description: 一个把代码、创意和一点点无厘头搅拌在一起的人。
+  highlight_word: 无厘头                  # description 里高亮成橙红色的词
+  image: /images/hero.png                # 首屏主插画；留空则回落到 avatar
+  image_alt: 戴圆框眼镜、穿黄色卫衣、正在敲代码的程序员卡通形象
+  bubble: 代码是画笔，产品是画布！          # 人物旁的小气泡；留空则不渲染
+
+# ── 联系方式 ────────────────────────────────────────────────────────────────
+# 每一项都支持 { value, visible, label }：
+#   value   实际内容（必填，留空即视为未配置）
+#   visible 设为 false 可临时隐藏而不用删掉数据
+#   label   展示文案，留空则直接显示 value
+# 电话自动生成 tel:，邮箱自动生成 mailto:，微信是纯文本（不可点击），
+# GitHub 自动补全 https:// 并加 rel="noopener noreferrer"。
+contact:
+  phone:
+    value: 138-8888-6666
+    visible: true
+  email:
+    value: hello@example.com
+    visible: true
+  wechat:
+    value: yigeFYW
+    visible: true
+    # 可选：填写二维码图片路径后，微信块会变成可点击的链接，
+    # 鼠标移上去有边框+阴影动画，点击弹出 Fancybox 灯箱显示二维码。
+    # 图片放在站点 source/images/ 下，用站点绝对路径引用。
+    qr: ''                                  # 例如 /images/wechat-qr.png
+  github:
+    value: https://github.com/yigeFYW
+    label: github.com/yigeFYW
+    visible: true
+
+  # 可选：额外的联系方式（博客、掘金、LinkedIn……）
+  # extra:
+  #   - { label: 博客, value: example.com, url: https://example.com, icon: link }
+
+# ── 个人简介 ────────────────────────────────────────────────────────────────
+about:
+  title: 个人简介
+  # 多行会渲染成多个段落
+  content: |
+    热爱前端与全栈开发，擅长把复杂需求变成好看又好用的产品。喜欢折腾 AI、SaaS、公众号生态，也喜欢做一点脑洞大开的有趣设计。
+    相信好产品既要能跑起来，也要让人第一眼就想用下去。
+  # Folder 吉祥物旁的气泡；留空则不渲染
+  bubble: |
+    想法很多，
+    正在实现中……
+
+# ── 专业技能 ────────────────────────────────────────────────────────────────
+skills_note: 技能满格，快乐加倍！          # 标题右侧的小字；留空则不渲染
+
+# level: 0–100，会渲染成进度条 + 百分比文字（不只靠颜色传达信息）。
+# 不写 level 也可以，此时只显示图标和名称。
+# icon: 主题内置的图标名（共 68 个），按分类：
+#   编程语言：vue / nextjs / nestjs / typescript / nodejs / python / java /
+#             c / cpp / go / rust / ruby / swift / kotlin / graphql / php / sass
+#   数据库与中间件：mysql / neo4j / redis / postgresql / kafka
+#   框架与构建工具：react / angular / spring / dart / flutter / electron /
+#             vite / webpack / html5 / css3 / git / tailwind / docker
+#   AI 工具：ai / codex / claude / workbuddy
+#   设计软件：design / figma / photoshop / illustrator / sketch / xd
+#   平台与网页：miniprogram / website
+#   UI 通用：code / star / sparkle
+# 写了不存在的名字会回落到一个通用笑脸图标，不会报错。
+skills:
+  - { name: 'Vue 3',      level: 90, icon: vue }
+  - { name: 'Next.js',    level: 85, icon: nextjs }
+  - { name: 'NestJS',     level: 80, icon: nestjs }
+  - { name: 'TypeScript', level: 90, icon: typescript }
+  - { name: 'Node.js',    level: 85, icon: nodejs }
+  - { name: 'MySQL',      level: 80, icon: mysql }
+  - { name: 'Neo4j',      level: 75, icon: neo4j }
+  - { name: 'Docker',     level: 85, icon: docker }
+  - { name: 'UI 设计',    level: 80, icon: design }
+  - { name: 'AI 应用',    level: 80, icon: ai }
+
+# ── 工作经历 ────────────────────────────────────────────────────────────────
+# start / end 会拼成「start - end」；只写一个则只显示一个。
+# description 支持字符串或数组；tags 可选。
+experience:
+  - company: 趣商云
+    position: 全栈工程师
+    start: '2024'
+    end: 至今
+    description: 负责 SaaS 平台设计与开发，涵盖 H5、公众号功能、支付与内容系统。
+    tags: ['SaaS', 'NestJS', 'Vue 3']
+
+  - company: 某互联网团队
+    position: 前端工程师
+    start: '2022'
+    end: '2024'
+    description:
+      - 负责后台管理系统、可视化页面与组件库建设。
+      - 推动构建流程与前端规范落地，构建耗时下降约 40%。
+
+# ── 项目作品 ────────────────────────────────────────────────────────────────
+projects:
+  more_label: 更多项目
+  more_link: ''                          # 留空则指向主题生成的 /projects/ 列表页
+
+  # cover: 16:9 封面图，放在站点 source/images/ 下。
+  #        留空会使用主题内置的 SVG 占位封面，布局不会塌。
+  # demo / github: 留空则对应按钮不渲染。
+  items:
+    - name: AI 知识库平台
+      description: 基于 Vue、NestJS、Neo4j 的智能知识库系统。
+      cover: ''
+      tags: ['Vue 3', 'NestJS', 'Neo4j']
+      demo: ''
+      github: ''
+
+    - name: 公众号 H5 营销系统
+      description: 支持资源售卖、预约、订单和多模板切换。
+      cover: ''
+      tags: ['Vue 3', 'TDesign', 'WeChat']
+      demo: ''
+      github: ''
+
+    - name: 在线简历生成器
+      description: Markdown 编写简历，一键生成响应式静态页面。
+      cover: ''
+      tags: ['Next.js', 'Markdown', 'SSG']
+      demo: ''
+      github: ''
+
+# ── 简历 PDF 下载（侧边栏底部按钮，可选）─────────────────────────────────────
+# enable: false 或 url 留空都不会渲染按钮。
+# url 写站内路径（PDF 放在站点 source/ 下，如 source/files/resume.pdf →
+# /files/resume.pdf）时点击直接下载；写完整 https 地址则新标签页打开。
+resume_file:
+  enable: false
+  url: ''                                # 例如 /files/resume.pdf
+  label: 下载简历 PDF
+  filename: ''                           # 可选，下载后保存的文件名（仅站内文件生效）
+
+# ── 教育经历（可选，留空数组则整个 Section 隐藏）─────────────────────────────
+education:
+  - school: 某某大学
+    major: 计算机科学与技术 · 本科
+    start: '2012'
+    end: '2016'
+    description: 主修数据结构、操作系统、计算机网络与数据库原理。
+
+# ── SEO ────────────────────────────────────────────────────────────────────
+seo:
+  description: ''                        # 留空则自动取 about.content 第一段
+  keywords: 全栈工程师,Vue,NestJS,TypeScript,简历
+  og_image: ''                           # 留空则回落到 hero.image / avatar
+  twitter_site: ''                       # 例如 '@yourhandle'
+
+# ── 页脚 ────────────────────────────────────────────────────────────────────
+footer:
+  copyright: '©'
+  text: ''                               # 填写则完全替换默认页脚文案
+  icp: ''                                # ICP 备案号，如「宁ICP备12345678号」；留空则不渲染

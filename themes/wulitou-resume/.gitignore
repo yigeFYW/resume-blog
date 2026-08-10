@@ -1,0 +1,7 @@
+node_modules/
+# Hexo build artifacts, in case the theme dir is ever used as a build output
+public/
+db.json
+_multiconfig.yml
+.DS_Store
+*.log

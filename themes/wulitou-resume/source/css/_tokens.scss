@@ -1,0 +1,67 @@
+// Design tokens — single source of truth (DESIGN.md §14).
+// Only add a token here when more than one component needs it.
+
+:root {
+  --color-yellow: #ffd85c;
+  --color-yellow-soft: #ffe89a;
+  --color-yellow-deep: #f7c948;
+  --color-blue: #2d9cdb;
+  --color-orange: #ff6b35;
+  --color-green: #42b883;
+  --color-purple: #8b5cf6;
+  --color-pink: #ff85a2;
+
+  // Paper-warm background with cream cards; inner tiles sit one step lighter
+  // than the card they live on, which is what separates them in the target UI.
+  --color-bg: #fdf9f0;
+  --color-surface: #fefbf4;
+  --color-surface-raised: #fffdf8;
+  --color-surface-cream: #fdf6e6;
+  --color-text: #161616;
+  --color-text-secondary: #666666;
+  --color-text-muted: #8a8272;
+  --color-border: #efe8d8;
+  --color-border-soft: rgba(150, 126, 74, 0.14);
+  --color-border-strong: #d9d2c2;
+  --color-track: #eceadf;
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-sidebar: 28px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  --shadow-card: 0 10px 30px rgba(64, 48, 16, 0.06), 0 2px 6px rgba(64, 48, 16, 0.03);
+  --shadow-tile: 0 1px 3px rgba(64, 48, 16, 0.04);
+  --shadow-card-hover: 0 16px 36px rgba(64, 48, 16, 0.11);
+  --shadow-sidebar: 0 12px 34px rgba(180, 138, 20, 0.2);
+  --shadow-drawer: 0 0 40px rgba(36, 28, 10, 0.25);
+
+  --font-sans: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+
+  --page-gutter: var(--space-4);
+  --sidebar-width: 248px;
+  --header-height: 56px;
+  --tap-target: 44px;
+
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-fast: 160ms;
+  --duration-base: 240ms;
+  --duration-slow: 600ms;
+}
+
+// Breakpoints. Mobile-first: every mixin is a min-width query.
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
+$bp-wide: 1200px;

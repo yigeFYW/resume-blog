@@ -1,0 +1,15 @@
+{% set resume = wulitou_resume() %}
+{% include 'partial/hero.njk' %}
+
+<div class="wr-row wr-row--split wr-row--skills-about">
+  {% include 'partial/skills.njk' %}
+  {% include 'partial/about.njk' %}
+</div>
+
+<div class="wr-row wr-row--split wr-row--experience-projects">
+  {% include 'partial/experience.njk' %}
+  {% include 'partial/projects.njk' %}
+</div>
+
+{% include 'partial/education.njk' %}
+{% include 'partial/footer.njk' %}

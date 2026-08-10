@@ -1,0 +1,375 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Project detail page. Reuses the resume's card/tag/prose vocabulary so a
+// detail page reads as the same document, not a separate microsite.
+.wr-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  @include desktop-up {
+    gap: var(--space-5);
+  }
+}
+
+.wr-detail__back-row,
+.wr-back-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+// The back link is the page's primary escape hatch, so it gets a full tap
+// target and sits above the fold on every breakpoint.
+.wr-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-target);
+  padding: 0 var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-tile);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  transition: transform var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+
+  @include hover-capable {
+    &:hover {
+      background: var(--color-yellow-soft);
+      border-color: var(--color-yellow-deep);
+      transform: translateX(-3px);
+    }
+  }
+}
+
+.wr-back__icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--color-orange);
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.wr-detail__card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.wr-detail__cover {
+  aspect-ratio: 16 / 9;
+  background: var(--color-surface-cream);
+  border-bottom: 1px solid var(--color-border-soft);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.wr-detail__head {
+  padding: var(--space-5);
+
+  @include tablet-up {
+    padding: var(--space-6);
+  }
+}
+
+.wr-detail__title {
+  font-size: 24px;
+  line-height: 1.28;
+
+  @include tablet-up {
+    font-size: 30px;
+  }
+
+  @include desktop-up {
+    font-size: 34px;
+  }
+}
+
+.wr-detail__lead {
+  margin-top: var(--space-3);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+
+  @include desktop-up {
+    font-size: 16px;
+  }
+}
+
+// Role / period read as compact key-value chips rather than a table, which
+// keeps them scannable when they wrap to one per line on mobile.
+.wr-detail__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.wr-detail__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 5px var(--space-3);
+  background: var(--color-surface-cream);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-pill);
+  min-width: 0;
+}
+
+.wr-detail__meta-label {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.wr-detail__meta-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+  @include wrap-anywhere;
+}
+
+.wr-detail__head .wr-tags {
+  margin-top: var(--space-4);
+}
+
+.wr-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.wr-project__action--lg {
+  min-height: var(--tap-target);
+  padding: 0 var(--space-4);
+  font-size: 13px;
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+// Highlights + stack sit on the cream band between the header and the body so
+// the markdown prose starts on a clean surface.
+.wr-detail__facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: var(--color-surface-cream);
+  border-top: 1px solid var(--color-border-soft);
+  border-bottom: 1px solid var(--color-border-soft);
+
+  @include tablet-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+    padding: var(--space-6);
+  }
+}
+
+// A lone fact block must not leave a phantom empty column.
+.wr-detail__facts > :only-child {
+  grid-column: 1 / -1;
+}
+
+.wr-detail__fact {
+  min-width: 0;
+}
+
+.wr-detail__fact-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 16px;
+}
+
+.wr-detail__list {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+
+  li {
+    position: relative;
+    padding-left: var(--space-5);
+    @include wrap-anywhere;
+  }
+
+  li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 9px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-yellow);
+    border: 1.5px solid var(--color-text);
+  }
+}
+
+.wr-detail__body {
+  padding: var(--space-5);
+
+  @include tablet-up {
+    padding: var(--space-6);
+  }
+
+  // The prose block owns the vertical rhythm; a leading heading would
+  // otherwise double up on the card's own padding.
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+  }
+
+  // Wide tables and code blocks scroll inside the card instead of widening
+  // the page.
+  pre {
+    overflow-x: auto;
+    padding: var(--space-4);
+    background: var(--color-surface-cream);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  code {
+    font-size: 0.92em;
+  }
+
+  :not(pre) > code {
+    padding: 2px 6px;
+    background: var(--color-surface-cream);
+    border: 1px solid var(--color-border-soft);
+    border-radius: 6px;
+  }
+
+  blockquote {
+    margin: var(--space-4) 0;
+    padding: var(--space-2) var(--space-4);
+    border-left: 3px solid var(--color-yellow-deep);
+    color: var(--color-text-muted);
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border-soft);
+    text-align: left;
+  }
+
+  th {
+    background: var(--color-surface-cream);
+    color: var(--color-text);
+  }
+}
+
+.wr-deco--detail-star {
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 34px;
+  height: auto;
+  opacity: 0.75;
+}
+
+@include mobile-only {
+  .wr-deco--detail-star {
+    display: none;
+  }
+}
+
+// Prev/next
+.wr-detail__pager {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+
+  @include tablet-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+.wr-detail__pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-height: var(--tap-target);
+  padding: var(--space-3) var(--space-4);
+  @include tile;
+  border-radius: var(--radius-lg);
+  min-width: 0;
+  transition: transform var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+
+  @include hover-capable {
+    &:hover {
+      transform: translateY(-3px);
+      border-color: var(--color-yellow-deep);
+      box-shadow: var(--shadow-card-hover);
+    }
+  }
+}
+
+// A lone "next" link stays on the right so the pager still reads directionally.
+.wr-detail__pager-link--next {
+  text-align: right;
+
+  @include tablet-up {
+    &:only-child {
+      grid-column: 2;
+    }
+  }
+}
+
+.wr-detail__pager-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.wr-detail__pager-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  @include wrap-anywhere;
+}

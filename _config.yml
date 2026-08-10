@@ -12,8 +12,8 @@
 
 # ── 站点信息 ──────────────────────────────────────────────────────
 language: zh-CN
-url: https://yigefyw.github.io/resume-blog
-root: /resume-blog/
+url: http://tjjvi92yy.hn-bkt.clouddn.com 
+root: /
 permalink: posts/:title/
 
 # ── 主题 ──────────────────────────────────────────────────────────

@@ -1,0 +1,84 @@
+{% set resume = wulitou_resume() %}
+{% if resume.projects.items.length %}
+<section class="wr-section" id="projects" aria-labelledby="wr-projects-title">
+  <div class="wr-card wr-card--flush">
+    <div class="wr-section__head">
+      <h2 class="wr-section__title" id="wr-projects-title">
+        <span class="wr-section__badge">{% set iconName = 'folder' %}{% include 'partial/icons.njk' %}</span>
+        项目作品
+      </h2>
+
+      {% if resume.projects.moreLink %}
+      <a class="wr-more" href="{{ wulitou_url(resume.projects.moreLink) }}"
+         {% if resume.projects.moreExternal %}target="_blank" rel="noopener noreferrer"{% endif %}>
+        {{ resume.projects.moreLabel }}
+        <span class="wr-more__icon" aria-hidden="true">{% set iconName = 'arrow-right' %}{% include 'partial/icons.njk' %}</span>
+      </a>
+      {% endif %}
+    </div>
+
+    <ul class="wr-projects">
+      {% for project in resume.projects.items %}
+      <li class="wr-project">
+        <article class="wr-project__card">
+          <div class="wr-project__cover">
+            <img src="{{ wulitou_url(project.cover) }}"
+                 alt="{{ project.coverAlt if project.hasCover else '' }}"
+                 {% if not project.hasCover %}aria-hidden="true"{% endif %}
+                 width="480" height="270"
+                 loading="lazy"
+                 decoding="async">
+          </div>
+
+          <div class="wr-project__body">
+            <h3 class="wr-project__name">
+              {% if project.detailHref %}
+              <a href="{{ wulitou_url(project.detailHref) }}">{{ project.name }}</a>
+              {% elif project.primaryHref %}
+              <a href="{{ project.primaryHref }}" target="_blank" rel="noopener noreferrer">{{ project.name }}</a>
+              {% else %}
+              {{ project.name }}
+              {% endif %}
+            </h3>
+
+            {% if project.description %}
+            <p class="wr-project__desc">{{ project.description }}</p>
+            {% endif %}
+
+            {% if project.tags.length %}
+            <ul class="wr-tags">
+              {% for tag in project.tags %}<li class="wr-tag">{{ tag }}</li>{% endfor %}
+            </ul>
+            {% endif %}
+
+            {# Sibling links, never nested inside the title link. #}
+            {% if project.detailHref or project.demo or project.github %}
+            <p class="wr-project__actions">
+              {% if project.detailHref %}
+              <a class="wr-project__action wr-project__action--detail" href="{{ wulitou_url(project.detailHref) }}">
+                详情<span class="wr-visually-hidden">：{{ project.name }}</span>
+                <span aria-hidden="true">{% set iconName = 'arrow-right' %}{% include 'partial/icons.njk' %}</span>
+              </a>
+              {% endif %}
+              {% if project.demo %}
+              <a class="wr-project__action" href="{{ project.demo }}" target="_blank" rel="noopener noreferrer">
+                Demo<span class="wr-visually-hidden">（{{ project.name }}，新窗口打开）</span>
+                <span aria-hidden="true">{% set iconName = 'external' %}{% include 'partial/icons.njk' %}</span>
+              </a>
+              {% endif %}
+              {% if project.github %}
+              <a class="wr-project__action" href="{{ project.github }}" target="_blank" rel="noopener noreferrer">
+                GitHub<span class="wr-visually-hidden">（{{ project.name }}，新窗口打开）</span>
+                <span aria-hidden="true">{% set iconName = 'external' %}{% include 'partial/icons.njk' %}</span>
+              </a>
+              {% endif %}
+            </p>
+            {% endif %}
+          </div>
+        </article>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}

@@ -1,0 +1,388 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Timeline: blue vertical rail + circular nodes (DESIGN.md §10).
+.wr-timeline {
+  position: relative;
+  padding-left: var(--space-6);
+
+  // Rail is drawn on the list, not per item, so gaps never break the line.
+  &::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--color-blue), rgba(45, 156, 219, 0.25));
+    border-radius: var(--radius-pill);
+  }
+}
+
+.wr-timeline__item {
+  position: relative;
+  min-width: 0;
+
+  & + & {
+    margin-top: var(--space-5);
+  }
+}
+
+.wr-timeline__node {
+  position: absolute;
+  left: calc(var(--space-6) * -1 + 1px);
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 3px solid var(--color-blue);
+  box-shadow: 0 0 0 3px rgba(45, 156, 219, 0.12);
+}
+
+.wr-timeline__body {
+  min-width: 0;
+}
+
+// Period / company / position must scan faster than the description.
+.wr-timeline__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  font-size: 15px;
+}
+
+.wr-timeline__period {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.wr-timeline__company {
+  position: relative;
+  font-weight: 700;
+  color: var(--color-text);
+  @include wrap-anywhere;
+}
+
+.wr-timeline__position {
+  font-weight: 700;
+  color: var(--color-blue);
+  @include wrap-anywhere;
+}
+
+.wr-timeline__desc {
+  margin-top: var(--space-2);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+
+  p + p {
+    margin-top: var(--space-1);
+  }
+}
+
+.wr-deco--exp-rocket {
+  top: 52%;
+  right: 10px;
+  width: 40px;
+  height: auto;
+  opacity: 0.9;
+}
+
+.wr-deco--ladybug {
+  bottom: 14px;
+  right: 42px;
+  width: 26px;
+  height: auto;
+  opacity: 0.85;
+}
+
+@include mobile-only {
+  .wr-deco--exp-rocket,
+  .wr-deco--ladybug {
+    display: none;
+  }
+}
+
+// Tags
+.wr-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  min-width: 0;
+}
+
+// Soft tinted pills. The target cycles hues across a card's tags, so each tag
+// picks its tint from its position rather than needing per-tag config.
+.wr-tag {
+  padding: 3px var(--space-3);
+  background: var(--wr-tag-bg, #f3f0e4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--wr-tag-fg, #7b7259);
+  @include wrap-anywhere;
+}
+
+.wr-tags > :nth-child(5n + 1) {
+  --wr-tag-bg: #e8f3e2;
+  --wr-tag-fg: #4a7c3f;
+}
+
+.wr-tags > :nth-child(5n + 2) {
+  --wr-tag-bg: #fbe4e4;
+  --wr-tag-fg: #b5504f;
+}
+
+.wr-tags > :nth-child(5n + 3) {
+  --wr-tag-bg: #fdf0d8;
+  --wr-tag-fg: #a37a2e;
+}
+
+.wr-tags > :nth-child(5n + 4) {
+  --wr-tag-bg: #ddeef7;
+  --wr-tag-fg: #3a7ea3;
+}
+
+.wr-tags > :nth-child(5n + 5) {
+  --wr-tag-bg: #e6e4f5;
+  --wr-tag-fg: #6257a8;
+}
+
+// Projects: 1 col mobile, 2 tablet, 3 desktop (DESIGN.md §11).
+.wr-projects {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+
+  @include tablet-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include wide-up {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.wr-project {
+  min-width: 0;
+}
+
+.wr-project__card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  @include tile;
+  border-radius: var(--radius-lg);
+  transition: transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+
+  @include hover-capable {
+    &:hover {
+      transform: translateY(-4px);
+      border-color: var(--color-yellow-deep);
+      box-shadow: var(--shadow-card-hover);
+    }
+  }
+}
+
+.wr-project__cover {
+  // aspect-ratio reserves the box before the image loads (no CLS).
+  aspect-ratio: 16 / 9;
+  background: var(--color-surface-cream);
+  border-bottom: 1px solid var(--color-border-soft);
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.wr-project__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1 1 auto;
+  padding: var(--space-4);
+  min-width: 0;
+}
+
+.wr-project__name {
+  font-size: 15px;
+  @include wrap-anywhere;
+
+  // The title is the card's primary action, so it gets a real tap target
+  // rather than the inline-link exception.
+  a {
+    display: block;
+    padding: 9px 0;
+    margin: -9px 0;
+
+    @include hover-capable {
+      &:hover {
+        color: var(--color-blue);
+      }
+    }
+  }
+}
+
+.wr-project__desc {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+}
+
+.wr-project__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.wr-project__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  padding: 0 var(--space-3);
+  background: var(--color-surface-cream);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+
+  svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  @include hover-capable {
+    &:hover {
+      background: var(--color-yellow-soft);
+      border-color: var(--color-yellow-deep);
+    }
+  }
+}
+
+.wr-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+  min-height: var(--tap-target);
+  padding: 0 var(--space-2);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-blue);
+}
+
+.wr-more__icon {
+  width: 18px;
+  height: 18px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Education (optional section)
+.wr-education__item {
+  padding-bottom: var(--space-4);
+  min-width: 0;
+
+  & + & {
+    padding-top: var(--space-4);
+    border-top: 1px dashed var(--color-border);
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.wr-education__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  font-size: 15px;
+}
+
+.wr-education__period {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.wr-education__school {
+  font-weight: 700;
+  @include wrap-anywhere;
+}
+
+.wr-education__major {
+  font-weight: 700;
+  color: var(--color-purple);
+  @include wrap-anywhere;
+}
+
+.wr-education__desc {
+  margin-top: var(--space-2);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}
+
+// Footer
+.wr-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4) var(--space-6);
+  text-align: center;
+}
+
+.wr-footer__deco {
+  width: 24px;
+  height: auto;
+  flex: 0 0 auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wr-footer__text {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  @include wrap-anywhere;
+
+  a {
+    color: var(--color-blue);
+    font-weight: 700;
+  }
+}
+
+.wr-footer__icp {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, color 0.2s ease;
+
+  @include hover-capable {
+    &:hover {
+      opacity: 1;
+      color: var(--color-blue);
+    }
+  }
+}

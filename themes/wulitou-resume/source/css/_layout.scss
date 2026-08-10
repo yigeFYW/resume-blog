@@ -1,0 +1,133 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Mobile/tablet: header + single content column.
+// Desktop (>=1024px): sticky sidebar + main, 24px gap, minmax(0,1fr) so long
+// content shrinks instead of forcing horizontal scroll.
+.wr-shell {
+  display: block;
+  padding: var(--page-gutter);
+  padding-top: calc(var(--header-height) + var(--space-4));
+
+  @include tablet-up {
+    --page-gutter: var(--space-5);
+  }
+
+  @include desktop-up {
+    --page-gutter: var(--space-6);
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+    padding-top: var(--page-gutter);
+    max-width: 1680px;
+    margin: 0 auto;
+  }
+}
+
+.wr-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+
+  @include tablet-up {
+    gap: var(--space-5);
+  }
+
+  @include desktop-up {
+    gap: var(--space-6);
+  }
+}
+
+.wr-row {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+
+  @include tablet-up {
+    gap: var(--space-5);
+  }
+
+  @include desktop-up {
+    gap: var(--space-6);
+  }
+}
+
+// Skills|About and Experience|Projects sit side by side only when there is
+// genuinely room for two readable columns.
+.wr-row--split {
+  grid-template-columns: minmax(0, 1fr);
+
+  @include wide-up {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+// 58/42 split matching the target UI. Skills needs the extra width so five
+// columns can show a name like "TypeScript" without breaking mid-word.
+.wr-row--skills-about {
+  @include wide-up {
+    grid-template-columns: minmax(0, 1.38fr) minmax(0, 1fr);
+  }
+}
+
+.wr-row--experience-projects {
+  @include wide-up {
+    // Projects grid needs more room than the timeline.
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  }
+}
+
+// A row with a single visible child must not leave a phantom empty column.
+.wr-row--split > :only-child {
+  grid-column: 1 / -1;
+}
+
+.wr-section {
+  min-width: 0;
+}
+
+.wr-card {
+  @include card;
+  position: relative;
+  padding: var(--space-5);
+  min-width: 0;
+
+  @include tablet-up {
+    padding: var(--space-6);
+  }
+}
+
+.wr-card--cream {
+  background: var(--color-surface-cream);
+}
+
+.wr-card--flush {
+  height: 100%;
+}
+
+// Decoration layer: never affects geometry, never blocks interaction.
+.wr-deco {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  z-index: 0;
+}
+
+.wr-card > *:not(.wr-deco) {
+  position: relative;
+  z-index: 1;
+}
+
+// Cards clip their own decorations so nothing can create page-level overflow.
+.wr-card {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wr-deco {
+    animation: none !important;
+  }
+}

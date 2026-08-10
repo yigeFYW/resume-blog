@@ -1,0 +1,87 @@
+@use 'tokens' as *;
+
+@mixin tablet-up {
+  @media (min-width: $bp-tablet) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: $bp-desktop) {
+    @content;
+  }
+}
+
+@mixin wide-up {
+  @media (min-width: $bp-wide) {
+    @content;
+  }
+}
+
+@mixin mobile-only {
+  @media (max-width: #{$bp-tablet - 0.02px}) {
+    @content;
+  }
+}
+
+// Below desktop the sidebar is replaced by the header + drawer.
+@mixin below-desktop {
+  @media (max-width: #{$bp-desktop - 0.02px}) {
+    @content;
+  }
+}
+
+@mixin hover-capable {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}
+
+@mixin motion-ok {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+// Keeps a container scrollable by keyboard/wheel/touch while hiding the bar.
+// Only for panels whose scrollability is already obvious from their content.
+@mixin no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+@mixin card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+// Inner tiles (skill cells, contact cells, project cards) sit one step lighter
+// than the card behind them with a hairline edge — heavier borders read as a
+// dashboard grid rather than the target's soft paper look.
+@mixin tile {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-tile);
+}
+
+// Long unbroken strings (URLs, English project names) must wrap, not overflow.
+// `overflow-wrap` alone breaks only when a word cannot fit its line, so normal
+// words stay intact — unlike `word-break: break-word`, which breaks eagerly.
+@mixin wrap-anywhere {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+// For short labels (skill names, contact values) that should keep their word
+// shape and shrink the font instead of fracturing.
+@mixin wrap-soft {
+  min-width: 0;
+  overflow-wrap: break-word;
+}

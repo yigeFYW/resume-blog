@@ -1,0 +1,38 @@
+{
+  "name": "hexo-theme-wulitou-resume",
+  "version": "1.0.0",
+  "description": "A playful cartoon-style responsive resume theme for Hexo. Nunjucks + SCSS + vanilla JS, no runtime framework.",
+  "keywords": [
+    "hexo",
+    "hexo-theme",
+    "resume",
+    "cv",
+    "portfolio",
+    "responsive",
+    "cartoon",
+    "nunjucks",
+    "scss"
+  ],
+  "author": "一个放羊娃",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yigeFYW/hexo-theme-wulitou-resume.git"
+  },
+  "homepage": "https://github.com/yigeFYW/hexo-theme-wulitou-resume#readme",
+  "bugs": {
+    "url": "https://github.com/yigeFYW/hexo-theme-wulitou-resume/issues"
+  },
+  "scripts": {
+    "postinstall": "node -e \"try{require.resolve('sass');console.log('[wulitou-resume] sass ready')}catch(e){console.warn('[wulitou-resume] sass missing - run npm install in the theme folder')}\""
+  },
+  "dependencies": {
+    "sass": "^1.77.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "hexo": {
+    "version": "5.4.2"
+  }
+}

@@ -1,0 +1,63 @@
+{% set resume = wulitou_resume() %}
+<aside class="wr-sidebar" aria-label="个人信息与导航">
+  <div class="wr-sidebar__inner">
+    <div class="wr-sidebar__profile">
+      {% if resume.avatar %}
+      <div class="wr-avatar">
+        <img class="wr-avatar__img"
+             src="{{ wulitou_url(resume.avatar) }}"
+             alt="{{ resume.name }}的头像"
+             width="104" height="104"
+             decoding="async">
+        <span class="wr-avatar__bubble" aria-hidden="true">Hi!</span>
+      </div>
+      {% endif %}
+
+      {% if resume.name %}<p class="wr-sidebar__name">{{ resume.name }}</p>{% endif %}
+
+      {% if resume.titleLines.length %}
+      <p class="wr-sidebar__role">
+        {% for line in resume.titleLines %}<span class="wr-sidebar__role-line">{{ line }}{% if not loop.last %} /{% endif %}</span>{% if not loop.last %} {% endif %}{% endfor %}
+      </p>
+      {% endif %}
+
+      {% if theme.theme_options.decorations !== false %}
+      <img class="wr-deco wr-deco--sidebar-arrow" src="{{ wulitou_asset('arrow.png') }}" alt="" aria-hidden="true" width="110" height="63" loading="lazy" decoding="async">
+      {% endif %}
+    </div>
+
+    {% if resume.nav.length %}
+    {% set isDetail = wulitou_is_subpage(page) %}
+    {% set pinnedAnchor = resume.options.project_nav_anchor if isDetail else '' %}
+    <nav class="wr-nav" aria-label="页面导航">
+      <ul class="wr-nav__list">
+        {% for item in resume.nav %}
+        {% set isPinned = isDetail and item.anchor == pinnedAnchor %}
+        <li>
+          <a class="wr-nav__link{{ ' is-active' if isPinned }}"
+             href="{{ wulitou_nav_href(item.anchor, isDetail) }}"
+             {% if isPinned %}aria-current="page"{% endif %}
+             {% if not isDetail %}data-wr-nav-link="{{ item.anchor }}"{% endif %}>
+            {% if theme.theme_options.nav_icons !== false and item.icon %}
+            <span class="wr-nav__icon" aria-hidden="true">{% set iconName = item.icon %}{% include 'partial/icons.njk' %}</span>
+            {% endif %}
+            <span class="wr-nav__label">{{ item.label }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% set variant = 'sidebar' %}{% include 'partial/download.njk' %}
+
+    {% if theme.theme_options.decorations !== false %}
+    <div class="wr-sidebar__deco" aria-hidden="true">
+      <img class="wr-sidebar__deco-coffee" src="{{ wulitou_asset('coffee-cup.png') }}" alt="" width="138" height="100" loading="lazy" decoding="async">
+      <img class="wr-sidebar__deco-jiayou" src="{{ wulitou_asset('jiayou.png') }}" alt="" width="100" height="60" loading="lazy" decoding="async">
+      <img class="wr-sidebar__deco-plant" src="{{ wulitou_asset('plant.png') }}" alt="" width="76" height="78" loading="lazy" decoding="async">
+      <img class="wr-sidebar__deco-star" src="{{ wulitou_asset('star.png') }}" alt="" width="44" height="37" loading="lazy" decoding="async">
+    </div>
+    {% endif %}
+  </div>
+</aside>
